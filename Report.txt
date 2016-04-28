@@ -1,0 +1,27 @@
+Besides the code to your manager please submit the following Report:
+
+A short introduction to the problem you are trying to solve.
+
+A description of the how each of the page replacement  methods work, including your hybrid one.
+
+A description of your code design and your choice of data structures.
+
+Correctness Results - In this section you should present the results for each replacement algorithm in the following way:
+
+	Use the setting that has the minimum amount of physical pages (so replacements will happen more often)
+
+	Show a small input file (around 15 memory accesses).
+
+	Manually draw a diagram (like in the HW solutions) which show the page replacements.
+
+	Manually calculate the number of page faults and disk accesses.
+
+	Show the output of your algorithm to ensure correctness.
+
+Analysis Results - Using a larger input file (), show a table which compares the results of all different page replacement algorithms.  When generating larger files try to be thoughtful of how you generate them (perhaps use the ideas of working sets).
+
+Conclusion - Which algorithms worked the best and in what cases.
+
+An appendix describing which part of the project each team member was in charge of.
+
+References - If necessary.

@@ -61,7 +61,7 @@ public class Parse{
         address = sc.nextInt(); 
         //System.out.println("address: "+address);
         
-        read/write = sc.nextString(); 
+        //readWrite = sc.nextString(); 
         //System.out.println("read/write: "+readWrite);
         
         process = new Process(pid, address, readWrite);

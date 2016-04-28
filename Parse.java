@@ -51,17 +51,27 @@ public class Parse{
       
       //assign the file to the scanner
       Scanner sc = new Scanner(file);
-      
-      //this loop goes through the file and scans until the very end
-      while (sc.hasNextInt()){ 
+      String line;
+      String[] lineVector;
+      String str;
         
-        pid = sc.nextInt(); 
+      //this loop goes through the file and scans until the very end
+      while (sc.hasNextLine()){ 
+        
+        //get next line, read the entire line separated by commans into liveVector
+        line = sc.nextLine();
+        lineVector = line.split(",");
+        
+        pid = Integer.parseInt(lineVector[0]); 
         //System.out.println("pid: "+pid);
         
-        address = sc.nextInt(); 
+        str = lineVector[1]; 
+        str = str.replaceAll("\\s+",""); //in order to get rid of white spaces
+        address = Integer.parseInt(str);
         //System.out.println("address: "+address);
         
-        //readWrite = sc.nextString(); 
+        readWrite = lineVector[2]; 
+        readWrite = readWrite.replaceAll("\\s+","");
         //System.out.println("read/write: "+readWrite);
         
         process = new Process(pid, address, readWrite);
