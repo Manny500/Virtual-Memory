@@ -17,6 +17,7 @@ public class Algorithms{
   int virtualSizeRep = 16; //64 (2^16)KB virtual memory
   int physicalSizeRep = 11; //2 (2^11)KB physical memory
   int physicalAddress;
+  int memoryCount;
   int faultCount; 
   int pageNum; //frame number, after that its a new page?
   int access;
@@ -112,6 +113,7 @@ public class Algorithms{
     Process[] myList = new Process[frameNum];
     physicalAddress = 0;
     faultCount = 0;
+    memoryCount = 0;
     modify = null;
     pageNum = 1; //frame number, after that its a new page?
     access = -1;
@@ -158,6 +160,17 @@ public class Algorithms{
       
       //If we have to modify, calculate which frame to modify
       if(modify == true){
+    
+        //reads only acces memory once
+        if(process.getReadWrite().equals("R")){
+          
+          memoryCount++;
+          
+          //if dirty must access memory twice
+        }else if(process.getReadWrite().equals("W")){
+          
+          memoryCount = memoryCount + 2;
+        }
         
         //if there is a space open
         if(empty != -1){
@@ -200,6 +213,7 @@ public class Algorithms{
               
               physicalAddress = physicalAddress + process.getAddress() ;
               
+              //print frame information
               System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ x +" with replacement.");
               System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
               break;
@@ -214,6 +228,13 @@ public class Algorithms{
        //if not modifications just print info and move on
       }else{
         
+        //check for dirty bit
+        if(process.getReadWrite().equals("W")){
+          
+          memoryCount++;
+        }
+        
+        //print frame information
         System.out.println("no page fault. accessed frame #"+ access);
         System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
         
@@ -225,7 +246,7 @@ public class Algorithms{
     }
     
     //print summary info
-    System.out.println("Number of page faults: " + faultCount +". Number of memory accesses: " + 11);
+    System.out.println("Number of page faults: " + faultCount +". Number of memory accesses: " + memoryCount);
     
   }//end of fifo
   
