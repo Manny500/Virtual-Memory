@@ -11,8 +11,11 @@ public class Algorithms{
   //Instance  Variables
   ArrayList<Process> sortingL = new ArrayList<Process>();
   Parse parse = new Parse();
-  Process process;
+  String virtualAddress = null;
+  String frameSizeB = null;
+  String offsetS = null;
   Process process1;
+  Process process;
   Boolean modify;
   int virtualSizeRep = 16; //64 (2^16)KB virtual memory
   int physicalSizeRep = 11; //2 (2^11)KB physical memory
@@ -43,10 +46,8 @@ public class Algorithms{
     int result = Integer.parseInt(pageSize);
     int pageSizebitRep = log(result, 2);
     int frameNum = (int)Math.pow(2,(physicalSizeRep - pageSizebitRep));
-    int offset = physicalSizeRep - pageSizebitRep;
-    
-    //calculate the size of each frame 
-    int frameSize = (result/frameNum);
+    int offset = physicalSizeRep - pageSizebitRep; 
+    int frameSize = (result/frameNum); //calculate the size of each frame
     
     if( (result >= 32) && (result <= 512) && (result % 2) == 0){
       
@@ -86,7 +87,7 @@ public class Algorithms{
         
       }else if(algorithm == "hybrid"){
         
-        //hybrid(list);
+        hybrid(list, frameNum, frameSize, offset);
         
       }
       
@@ -109,15 +110,20 @@ public class Algorithms{
   /*
    * @param list contains the process to be scheduled
    * @param frameNumber is the frame numbers to use in the scheduler
-   * FIFO first in first out algorithm
+   * @param frameSize is the size of each frame
+   * @param offset is the number of digits needed for the offset
+   * FIFO first in first out scheduling algorithm
    */
   public void fifo(ArrayList<Process> list, int frameNum, int frameSize, int offset){
     
     //Instance Variables
     Process[] myList = new Process[frameNum];
+    virtualAddress = null;
     physicalAddress = 0;
-    faultCount = 0;
+    frameSizeB = null;
     memoryCount = 0;
+    offsetS = null;
+    faultCount = 0;
     modify = null;
     pageNum = 1; //frame number, after that its a new page?
     access = -1;
@@ -183,19 +189,20 @@ public class Algorithms{
           myList[empty] = process;
           
           //get binary rep of the virtual address
-          String virtualAddress = Integer.toBinaryString((process.getAddress()));
+          virtualAddress = Integer.toBinaryString((process.getAddress()));
           
           //get the offset bits
           virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
-          String offsetS = virtualAddress.substring(0,offset);
-          offsetS = new StringBuilder(offsetS).reverse().toString();
-            
-            //translate the virtual adress to physical address
-            //convert to binary string
-            String frameSizeB = Integer.toBinaryString((frameSize*empty));
+          offsetS = virtualAddress.substring(0,offset);
+          offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
+          
+          //translate the virtual adress to physical address
+          //convert to binary string
+          frameSizeB = Integer.toBinaryString((frameSize*empty));
           frameSizeB = frameSizeB.concat(offsetS);
           physicalAddress = Integer.parseInt(frameSizeB,2);
           
+          //print information
           System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ empty +" with no replacement.");
           System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
           
@@ -228,16 +235,16 @@ public class Algorithms{
               process.setAllocationTime(time);
               
               //get binary rep of the virtual address
-              String virtualAddress = Integer.toBinaryString((process.getAddress()));
+              virtualAddress = Integer.toBinaryString((process.getAddress()));
               
               //get the offset bits
               virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
-              String offsetS = virtualAddress.substring(0,offset);
-              offsetS = new StringBuilder(offsetS).reverse().toString();
-                
-                //translate the virtual adress to physical address
-                //convert to binary string
-                String frameSizeB = Integer.toBinaryString((frameSize*x));
+              offsetS = virtualAddress.substring(0,offset);
+              offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
+              
+              //translate the virtual adress to physical address
+              //convert to binary string
+              frameSizeB = Integer.toBinaryString((frameSize*x));
               frameSizeB = frameSizeB.concat(offsetS);
               physicalAddress = Integer.parseInt(frameSizeB,2);
               
@@ -263,16 +270,16 @@ public class Algorithms{
         }
         
         //get binary rep of the virtual address
-        String virtualAddress = Integer.toBinaryString((process.getAddress()));
+        virtualAddress = Integer.toBinaryString((process.getAddress()));
         
         //get the offset bits
         virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
-        String offsetS = virtualAddress.substring(0,offset);
-        offsetS = new StringBuilder(offsetS).reverse().toString();
-          
-          //translate the virtual adress to physical address
-          //convert to binary string
-          String frameSizeB = Integer.toBinaryString((frameSize*access));
+        offsetS = virtualAddress.substring(0,offset);
+        offsetS = new StringBuilder(offsetS).reverse().toString();//reverse offset to get actual value
+        
+        //translate the virtual adress to physical address
+        //convert to binary string
+        frameSizeB = Integer.toBinaryString((frameSize*access));
         frameSizeB = frameSizeB.concat(offsetS);
         physicalAddress = Integer.parseInt(frameSizeB,2);
         
@@ -317,10 +324,13 @@ public class Algorithms{
   }//end of esca
   
   /*
-   * @param 
-   * Hybrid
+   * @param list contains the process to be scheduled
+   * @param frameNumber is the frame numbers to use in the scheduler
+   * @param frameSize is the size of each frame
+   * @param offset is the number of digits needed for the offset
+   * Hybrid is a modification on the fifo algorithm called clock
    */
-  public void hybrid(){
+  public void hybrid(ArrayList<Process> list, int frameNum, int frameSize, int offset){
     
   }//end of hybrid
   

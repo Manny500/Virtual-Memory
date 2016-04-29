@@ -1,10 +1,16 @@
-Besides the code to your manager please submit the following Report:
+Report:
 
 A short introduction to the problem you are trying to solve.
 
+	The
+
 A description of the how each of the page replacement  methods work, including your hybrid one.
 
+	Each
+
 A description of your code design and your choice of data structures.
+
+	The co
 
 Correctness Results - In this section you should present the results for each replacement algorithm in the following way:
 
@@ -18,10 +24,52 @@ Correctness Results - In this section you should present the results for each re
 
 	Show the output of your algorithm to ensure correctness.
 
+
+	FIFO: (512B page size)
+
+		101  102  103  104  101  102  105  101  102  103  104  101  102  103  104 
+		 R    R    R    R    W    R    R    R    R    R    R    R    R    W    R
+
+		101  101  101  104  104  104  1O5  105  105  105  105  101  101  101  104
+		 x   102  102  102  101  101  101  101  101  103  103  103  102  102  102
+		 x    x   103  103  103  102  102  102  102  102  104  104  104  103  103
+   
+   		 FD   FD   FD   FD  DFD   FD   FD             FD   FD   FD   FD  DFD   FD =	# of page faults   = 13
+												# of disk accesses = 15
+
+	HYBRID:(512B page size)
+
+		101  102  103  104  101  102  105  101  102  103  104  101  102  103  104 
+		 R    R    R    R    W    R    R    R    R    R    R    R    R    W    R
+
+		101  101  101  104  104  104  1O5  105  105  105  105  101  101  101  104
+		 x   102  102  102  101  101  101  101  101  103  103  103  102  102  102
+		 x    x   103  103  103  102  102  102  102  102  104  104  104  103  103
+   
+   		 FD   FD   FD   FD  DFD   FD   FD             FD   FD   FD   FD  DFD   FD =	# of page faults   = 13
+												# of disk accesses = 15
+	
+	OPRA:
+
+	LRU:
+
+	SCA:
+
+	ESCA:
+
 Analysis Results - Using a larger input file (), show a table which compares the results of all different page replacement algorithms.  When generating larger files try to be thoughtful of how you generate them (perhaps use the ideas of working sets).
 
 Conclusion - Which algorithms worked the best and in what cases.
 
 An appendix describing which part of the project each team member was in charge of.
+
+	Manny - Skeleton of the program/design
+	Manny - FIFO and HYBRID scheduling algorithms, code and report analysis
+	Manny - Analysis Results
+	Manny - Conclusion
+
+	Conrad - OPRA, LRU, SCA, and ESCA scheduling algorithms, code and report analysis
+	Conrad - Complete and in depth description of how each algorithm works
+	Conrad - Introduction
 
 References - If necessary.
