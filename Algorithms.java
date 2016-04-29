@@ -24,7 +24,7 @@ public class Algorithms{
   int empty;
   int time;
   int pid;
-
+  
   //Constructor
   public Algorithms(){
     
@@ -43,6 +43,10 @@ public class Algorithms{
     int result = Integer.parseInt(pageSize);
     int pageSizebitRep = log(result, 2);
     int frameNum = (int)Math.pow(2,(physicalSizeRep - pageSizebitRep));
+    int offset = physicalSizeRep - pageSizebitRep;
+    
+    //calculate the size of each frame 
+    int frameSize = (result/frameNum);
     
     if( (result >= 32) && (result <= 512) && (result % 2) == 0){
       
@@ -66,7 +70,7 @@ public class Algorithms{
         
       }else if(algorithm == "fifo"){
         
-        fifo(list, frameNum);
+        fifo(list, frameNum, frameSize, offset);
         
       }else if(algorithm == "lru"){
         
@@ -107,7 +111,7 @@ public class Algorithms{
    * @param frameNumber is the frame numbers to use in the scheduler
    * FIFO first in first out algorithm
    */
-  public void fifo(ArrayList<Process> list, int frameNum){
+  public void fifo(ArrayList<Process> list, int frameNum, int frameSize, int offset){
     
     //Instance Variables
     Process[] myList = new Process[frameNum];
@@ -122,7 +126,7 @@ public class Algorithms{
     
     //clear the sorting list, make sure it is empty
     sortingL.clear();
-
+    
     //loop through all the process in the list
     while(!list.isEmpty()){
       
@@ -160,7 +164,7 @@ public class Algorithms{
       
       //If we have to modify, calculate which frame to modify
       if(modify == true){
-    
+        
         //reads only acces memory once
         if(process.getReadWrite().equals("R")){
           
@@ -178,7 +182,19 @@ public class Algorithms{
           //assign the process to the empty space/frame
           myList[empty] = process;
           
-          physicalAddress = physicalAddress + process.getAddress() ; //+myList[empty].getAddress();
+          //get binary rep of the virtual address
+          String virtualAddress = Integer.toBinaryString((process.getAddress()));
+          
+          //get the offset bits
+          virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+          String offsetS = virtualAddress.substring(0,offset);
+          offsetS = new StringBuilder(offsetS).reverse().toString();
+            
+            //translate the virtual adress to physical address
+            //convert to binary string
+            String frameSizeB = Integer.toBinaryString((frameSize*empty));
+          frameSizeB = frameSizeB.concat(offsetS);
+          physicalAddress = Integer.parseInt(frameSizeB,2);
           
           System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ empty +" with no replacement.");
           System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
@@ -211,7 +227,19 @@ public class Algorithms{
               myList[x] = process;
               process.setAllocationTime(time);
               
-              physicalAddress = physicalAddress + process.getAddress() ;
+              //get binary rep of the virtual address
+              String virtualAddress = Integer.toBinaryString((process.getAddress()));
+              
+              //get the offset bits
+              virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+              String offsetS = virtualAddress.substring(0,offset);
+              offsetS = new StringBuilder(offsetS).reverse().toString();
+                
+                //translate the virtual adress to physical address
+                //convert to binary string
+                String frameSizeB = Integer.toBinaryString((frameSize*x));
+              frameSizeB = frameSizeB.concat(offsetS);
+              physicalAddress = Integer.parseInt(frameSizeB,2);
               
               //print frame information
               System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ x +" with replacement.");
@@ -225,7 +253,7 @@ public class Algorithms{
         //since we modified we have a page fault
         faultCount ++;
         
-       //if not modifications just print info and move on
+        //if not modifications just print info and move on
       }else{
         
         //check for dirty bit
@@ -233,6 +261,20 @@ public class Algorithms{
           
           memoryCount++;
         }
+        
+        //get binary rep of the virtual address
+        String virtualAddress = Integer.toBinaryString((process.getAddress()));
+        
+        //get the offset bits
+        virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+        String offsetS = virtualAddress.substring(0,offset);
+        offsetS = new StringBuilder(offsetS).reverse().toString();
+          
+          //translate the virtual adress to physical address
+          //convert to binary string
+          String frameSizeB = Integer.toBinaryString((frameSize*access));
+        frameSizeB = frameSizeB.concat(offsetS);
+        physicalAddress = Integer.parseInt(frameSizeB,2);
         
         //print frame information
         System.out.println("no page fault. accessed frame #"+ access);
