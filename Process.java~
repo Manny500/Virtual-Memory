@@ -11,6 +11,7 @@ public class Process{
   String readWrite;
   int address;
   int pid;
+  int allocationTime;
   
   //Constructors
   public Process(){
@@ -22,6 +23,7 @@ public class Process{
     this.pid = pid;
     this.readWrite = readWrite;
     this.address = address;
+    this.allocationTime = 0;
     
   }
 ////////////////////////////METHODS//////////////////////////////////
@@ -51,7 +53,7 @@ public class Process{
   public int getAddress(){
     
     return this.address;
-  }//end of getBurst_time
+  }//end of getAddress
   
   /*
    * @param time sets the Burst_time of the process
@@ -60,7 +62,7 @@ public class Process{
   public void setAddress(int address){
     
     this.address = address;
-  }//end of getBurst_time
+  }//end of setAddress
  
   /*
    * @return int gets the Priority of the process
@@ -69,7 +71,7 @@ public class Process{
   public String getReadWrite(){
     
     return this.readWrite;
-  }//end of getPriority
+  }//end of getReadWrite
   
   /*
    * @param p sets the Priority of the process
@@ -78,7 +80,25 @@ public class Process{
   public void setReadWrite(String readWrite){
     
     this.readWrite = readWrite;
-  }//end of getPriority
+  }//end of setReadWrite
+  
+  /*
+   * @return int gets the Burst_time of the process
+   * will get the Burst_time of the process
+   */
+  public int getAllocationTime(){
+    
+    return this.allocationTime;
+  }//end of getBurst_time
+  
+  /*
+   * @param time sets the Burst_time of the process
+   * will set the Burst_time of the process
+   */
+  public void setAllocationTime(int time){
+    
+    this.allocationTime = time;
+  }//end of getBurst_time
   
 ////////////////////////End of Methods//////////////////////////////////////////////////// 
 }//end of process

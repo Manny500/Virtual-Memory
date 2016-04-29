@@ -13,8 +13,6 @@ public class VirtualMemoryManager{
     //Instantiate classes
     Algorithms alg = new Algorithms();
     
-    //ASK PROFESSOR ABOUT THE PARSING
-    
     //generate Large process file, analysis purposes
     //"algorithm", "page size 32-512B (must be a power of two) (check that it is in that range)", "Input file name"
     alg.manager("fifo", "512", "Small-Input-Processess.txt");

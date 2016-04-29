@@ -9,10 +9,11 @@ public class Process{
   
   //Instance Variables
   String readWrite;
-  int address;
-  int pid;
   int allocationTime;
-  
+  int address;
+  int usedBit;
+  int pid;
+
   //Constructors
   public Process(){
     
@@ -24,6 +25,7 @@ public class Process{
     this.readWrite = readWrite;
     this.address = address;
     this.allocationTime = 0;
+    this.usedBit = 1;
     
   }
 ////////////////////////////METHODS//////////////////////////////////
@@ -34,7 +36,7 @@ public class Process{
    */
   public int getPid(){
     
-    return this.pid = pid;
+    return this.pid;
   }//end of getPid
   
    /*
@@ -47,8 +49,8 @@ public class Process{
   }//end of setPid
   
   /*
-   * @return int gets the Burst_time of the process
-   * will get the Burst_time of the process
+   * @return int gets the Address of the process
+   * will get the Address of the process
    */
   public int getAddress(){
     
@@ -56,8 +58,8 @@ public class Process{
   }//end of getAddress
   
   /*
-   * @param time sets the Burst_time of the process
-   * will set the Burst_time of the process
+   * @param time sets the Address of the process
+   * will set the Address of the process
    */
   public void setAddress(int address){
     
@@ -65,8 +67,8 @@ public class Process{
   }//end of setAddress
  
   /*
-   * @return int gets the Priority of the process
-   * will get the Priority of the process
+   * @return int gets the ReadWrite of the process
+   * will get the ReadWrite of the process
    */
   public String getReadWrite(){
     
@@ -74,31 +76,49 @@ public class Process{
   }//end of getReadWrite
   
   /*
-   * @param p sets the Priority of the process
-   * will get the Priority of the process
+   * @param p sets the readWrite of the process
+   * will get the readWrite of the process
    */
   public void setReadWrite(String readWrite){
     
     this.readWrite = readWrite;
-  }//end of setReadWrite
+  }//end of setreadWrite
   
   /*
-   * @return int gets the Burst_time of the process
-   * will get the Burst_time of the process
+   * @return int gets the allocationTime of the process
+   * will get the allocationTime of the process
    */
   public int getAllocationTime(){
     
     return this.allocationTime;
-  }//end of getBurst_time
+  }//end of getallocationTime
   
   /*
-   * @param time sets the Burst_time of the process
-   * will set the Burst_time of the process
+   * @param time sets the allocationTime of the process
+   * will set the allocationTime of the process
    */
   public void setAllocationTime(int time){
     
     this.allocationTime = time;
-  }//end of getBurst_time
+  }//end of getallocationTime
+  
+   /*
+   * @return int gets the usedBit of the process
+   * will get the usedBit of the process
+   */
+  public int getUsedBit(){
+    
+    return this.usedBit;
+  }//end of getusedBit
+  
+   /*
+   * @return int gets the usedBit of the process
+   * will get the usedBit of the process
+   */
+  public void setUsedBit(int usedBit){
+    
+    this.usedBit = usedBit;
+  }//end of setusedBit
   
 ////////////////////////End of Methods//////////////////////////////////////////////////// 
 }//end of process
