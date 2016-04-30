@@ -25,6 +25,7 @@ public class Algorithms{
   int pageNum; //frame number, after that its a new page?
   int access;
   int empty;
+  int clock;
   int time;
   int pid;
   
@@ -49,7 +50,8 @@ public class Algorithms{
     int offset = physicalSizeRep - pageSizebitRep; 
     int frameSize = (result/frameNum); //calculate the size of each frame
     
-    if( (result >= 32) && (result <= 512) && (result % 2) == 0){
+    //check if the pagesize is between the allowed range and a power of two
+    if( (result >= 32) && (result <= 512) && ((result & (result - 1)) == 0)){
       
       //parse input file
       File processFile = new File(fileName); 
@@ -93,7 +95,7 @@ public class Algorithms{
       
     }else{
       
-      System.out.println("Page size is not between the allowed range");
+      System.out.println("Page size is not between the allowed range or not a power of two");
       
     }
     
@@ -171,21 +173,11 @@ public class Algorithms{
       //If we have to modify, calculate which frame to modify
       if(modify == true){
         
-        //reads only acces memory once
-        if(process.getReadWrite().equals("R")){
-          
-          memoryCount++;
-          
-          //if dirty must access memory twice
-        }else if(process.getReadWrite().equals("W")){
-          
-          memoryCount = memoryCount + 2;
-        }
-        
         //if there is a space open
         if(empty != -1){
           
           //assign the process to the empty space/frame
+          process.setAllocationTime(time);
           myList[empty] = process;
           
           //get binary rep of the virtual address
@@ -201,6 +193,19 @@ public class Algorithms{
           frameSizeB = Integer.toBinaryString((frameSize*empty));
           frameSizeB = frameSizeB.concat(offsetS);
           physicalAddress = Integer.parseInt(frameSizeB,2);
+          
+          //reads only acces memory once
+          if(process.getReadWrite().equals("R")){
+            
+            memoryCount++;
+            
+            //if dirty must access memory twice
+          }else if(process.getReadWrite().equals("W")){
+            
+            System.out.println("     Needed to write frame #" + empty + " to memory");
+            
+            memoryCount = memoryCount + 2;
+          }
           
           //print information
           System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ empty +" with no replacement.");
@@ -248,6 +253,19 @@ public class Algorithms{
               frameSizeB = frameSizeB.concat(offsetS);
               physicalAddress = Integer.parseInt(frameSizeB,2);
               
+              //reads only acces memory once
+              if(process.getReadWrite().equals("R")){
+                
+                memoryCount++;
+                
+                //if dirty must access memory twice
+              }else if(process.getReadWrite().equals("W")){
+                
+                System.out.println("     Needed to write frame #" + x + " to memory");
+                
+                memoryCount = memoryCount + 2;
+              }
+              
               //print frame information
               System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ x +" with replacement.");
               System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
@@ -266,6 +284,7 @@ public class Algorithms{
         //check for dirty bit
         if(process.getReadWrite().equals("W")){
           
+          System.out.println("     Needed to write frame #" + access + " to memory");
           memoryCount++;
         }
         
@@ -328,7 +347,9 @@ public class Algorithms{
    * @param frameNumber is the frame numbers to use in the scheduler
    * @param frameSize is the size of each frame
    * @param offset is the number of digits needed for the offset
-   * Hybrid is a modification of the fifo algorithm, algorithm called clock
+   * Hybrid Replace pages that haven’t been referenced for one complete revolution of the clock
+   * Goes around looking for a reference bit = 0, if it finds a bit = 0 then it replaces that page
+   * if the page is 1, it sets the bit to zero and moves on
    */
   public void hybrid(ArrayList<Process> list, int frameNum, int frameSize, int offset){
     
@@ -344,6 +365,7 @@ public class Algorithms{
     pageNum = 1; //frame number, after that its a new page?
     access = -1;
     empty = -1;
+    clock = 0;
     time = 0;
     
     //clear the sorting list, make sure it is empty
@@ -387,18 +409,6 @@ public class Algorithms{
       //If we have to modify, calculate which frame to modify
       if(modify == true){
         
-        //check how many times we need to access memory
-        //reads only acces memory once
-        if(process.getReadWrite().equals("R")){
-          
-          memoryCount++;
-          
-          //if dirty must access memory twice
-        }else if(process.getReadWrite().equals("W")){
-          
-          memoryCount = memoryCount + 2;
-        }
-        
         //if there is a space open
         if(empty != -1){
           
@@ -421,6 +431,19 @@ public class Algorithms{
           frameSizeB = frameSizeB.concat(offsetS);
           physicalAddress = Integer.parseInt(frameSizeB,2);
           
+          //reads only acces memory once
+          if(process.getReadWrite().equals("R")){
+            
+            memoryCount++;
+            
+            //if dirty must access memory twice
+          }else if(process.getReadWrite().equals("W")){
+            
+            System.out.println("     Needed to write frame #" + empty + " to memory");
+            
+            memoryCount = memoryCount + 2;
+          }
+          
           //print information
           System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ empty +" with no replacement.");
           System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
@@ -431,12 +454,13 @@ public class Algorithms{
           
           //look for the used bit equal to 0
           //check which full frame to replace
-          for(int x = 0; x < frameNum; x++){
-            
+          //set x to where we last left, keep a circular list
+          for(int x = clock; x < frameNum; x++){
+        
             if(myList[x].getUsedBit() == 0){
               
               process1 = myList[x];
-              
+              clock = x;
               break;
             }else
               
@@ -446,9 +470,9 @@ public class Algorithms{
             if(x == (frameNum - 1)){
               
               //reset the counter so we can go searching through the process again
-              x = 0;
+              x = -1;
             }
-              
+            
           }
           
           //check which full frame to replace
@@ -456,8 +480,8 @@ public class Algorithms{
             
             if(process1.getPid() == myList[x].getPid() ){
               
+              process.setUsedBit(1);
               myList[x] = process;
-              process.setAllocationTime(time);
               
               //get binary rep of the virtual address
               virtualAddress = Integer.toBinaryString((process.getAddress()));
@@ -473,6 +497,19 @@ public class Algorithms{
               frameSizeB = frameSizeB.concat(offsetS);
               physicalAddress = Integer.parseInt(frameSizeB,2);
               
+              //reads only acces memory once
+              if(process.getReadWrite().equals("R")){
+                
+                memoryCount++;
+                
+                //if dirty must access memory twice
+              }else if(process.getReadWrite().equals("W")){
+                
+                System.out.println("     Needed to write frame #" + x + " to memory");
+                
+                memoryCount = memoryCount + 2;
+              }
+              
               //print frame information
               System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ x +" with replacement.");
               System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
@@ -485,12 +522,13 @@ public class Algorithms{
         //since we modified we have a page fault
         faultCount ++;
         
-        //if not modifications just print info and move on
+        //if no modifications just print info and move on
       }else{
         
         //check for dirty bit
         if(process.getReadWrite().equals("W")){
           
+          System.out.println("     Needed to write frame #" + access + " to memory");
           memoryCount++;
         }
         

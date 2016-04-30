@@ -133,7 +133,7 @@ public class Algorithms{
     //clear the sorting list, make sure it is empty
     sortingL.clear();
     
-    //loop through all the process in the list
+    //loop through all the process in the list as they come in
     while(!list.isEmpty()){
       
       //obtain the next process to schedule
@@ -328,9 +328,202 @@ public class Algorithms{
    * @param frameNumber is the frame numbers to use in the scheduler
    * @param frameSize is the size of each frame
    * @param offset is the number of digits needed for the offset
-   * Hybrid is a modification on the fifo algorithm called clock
+   * Hybrid is a modification of the fifo algorithm, algorithm called clock
    */
   public void hybrid(ArrayList<Process> list, int frameNum, int frameSize, int offset){
+    
+    //Instance Variables
+    Process[] myList = new Process[frameNum];
+    virtualAddress = null;
+    physicalAddress = 0;
+    frameSizeB = null;
+    memoryCount = 0;
+    offsetS = null;
+    faultCount = 0;
+    modify = null;
+    pageNum = 1; //frame number, after that its a new page?
+    access = -1;
+    empty = -1;
+    time = 0;
+    
+    //clear the sorting list, make sure it is empty
+    //sortingL.clear();
+    
+    //loop through all the process in the list as they come in
+    while(!list.isEmpty()){
+      
+      //obtain the next process to schedule
+      process = list.get(0);
+      pid = process.getPid();
+      list.remove(0); //make sure to remove, avoid duplicates
+      
+      //check if we have to modify any of the frames, check for hits, empty spots
+      for(int x = 0; x < frameNum; x++){
+        
+        if( myList[x] != null){
+          
+          //check if any of the spots are a hit
+          if(pid != myList[x].getPid()){
+            
+            modify = true;
+            
+            //else if not null and equal, it means we have a hit
+          }else{
+            
+            access = x;
+            modify = false;
+            break;
+          }
+          
+          //means that there is an empty spot
+        }else{
+          
+          empty = x;
+          modify = true;
+          break;
+        }
+      }
+      
+      //If we have to modify, calculate which frame to modify
+      if(modify == true){
+        
+        //check how many times we need to access memory
+        //reads only acces memory once
+        if(process.getReadWrite().equals("R")){
+          
+          memoryCount++;
+          
+          //if dirty must access memory twice
+        }else if(process.getReadWrite().equals("W")){
+          
+          memoryCount = memoryCount + 2;
+        }
+        
+        //if there is a space open
+        if(empty != -1){
+          
+          //assign the process to the empty space/frame
+          //assign used bit to 1
+          process.setUsedBit(1);
+          myList[empty] = process;
+          
+          //get binary rep of the virtual address
+          virtualAddress = Integer.toBinaryString((process.getAddress()));
+          
+          //get the offset bits
+          virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+          offsetS = virtualAddress.substring(0,offset);
+          offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
+          
+          //translate the virtual adress to physical address
+          //convert to binary string
+          frameSizeB = Integer.toBinaryString((frameSize*empty));
+          frameSizeB = frameSizeB.concat(offsetS);
+          physicalAddress = Integer.parseInt(frameSizeB,2);
+          
+          //print information
+          System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ empty +" with no replacement.");
+          System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
+          
+          //reset the empty variable
+          empty = -1;
+        }else{
+          
+          //look for the used bit equal to 0
+          //check which full frame to replace
+          for(int x = 0; x < frameNum; x++){
+            
+            if(myList[x].getUsedBit() == 0){
+              
+              process1 = myList[x];
+              
+              break;
+            }else
+              
+              //set to zero and go to next process
+              myList[x].setUsedBit(0);
+            
+            if(x == (frameNum - 1)){
+              
+              //reset the counter so we can go searching through the process again
+              x = 0;
+            }
+              
+          }
+          
+          //check which full frame to replace
+          for(int x = 0; x < frameNum; x++){
+            
+            if(process1.getPid() == myList[x].getPid() ){
+              
+              myList[x] = process;
+              process.setAllocationTime(time);
+              
+              //get binary rep of the virtual address
+              virtualAddress = Integer.toBinaryString((process.getAddress()));
+              
+              //get the offset bits
+              virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+              offsetS = virtualAddress.substring(0,offset);
+              offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
+              
+              //translate the virtual adress to physical address
+              //convert to binary string
+              frameSizeB = Integer.toBinaryString((frameSize*x));
+              frameSizeB = frameSizeB.concat(offsetS);
+              physicalAddress = Integer.parseInt(frameSizeB,2);
+              
+              //print frame information
+              System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ x +" with replacement.");
+              System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
+              break;
+            }
+            
+          }
+        }
+        
+        //since we modified we have a page fault
+        faultCount ++;
+        
+        //if not modifications just print info and move on
+      }else{
+        
+        //check for dirty bit
+        if(process.getReadWrite().equals("W")){
+          
+          memoryCount++;
+        }
+        
+        //set used bit to 1, representing that it should stay for atleast one more round
+        process.setUsedBit(1);
+        
+        //get binary rep of the virtual address
+        virtualAddress = Integer.toBinaryString((process.getAddress()));
+        
+        //get the offset bits
+        virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+        offsetS = virtualAddress.substring(0,offset);
+        offsetS = new StringBuilder(offsetS).reverse().toString();//reverse offset to get actual value
+        
+        //translate the virtual adress to physical address
+        //convert to binary string
+        frameSizeB = Integer.toBinaryString((frameSize*access));
+        frameSizeB = frameSizeB.concat(offsetS);
+        physicalAddress = Integer.parseInt(frameSizeB,2);
+        
+        //print frame information
+        System.out.println("no page fault. accessed frame #"+ access);
+        System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
+        
+      }
+      
+      //time helps us determine how long/when a process was allocated
+      time++; 
+      
+    }
+    
+    //print summary info
+    System.out.println("Number of page faults: " + faultCount +". Number of memory accesses: " + memoryCount);
     
   }//end of hybrid
   
