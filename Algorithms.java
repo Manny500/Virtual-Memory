@@ -10,6 +10,8 @@ public class Algorithms{
   
   //Instance  Variables
   ArrayList<Process> sortingL = new ArrayList<Process>();
+  ArrayList<Process> processList = new ArrayList<Process>();
+  ArrayList<Process> oldList = new ArrayList<Process>();
   Parse parse = new Parse();
   String virtualAddress = null;
   String frameSizeB = null;
@@ -67,11 +69,11 @@ public class Algorithms{
       //depending on the parameters specifications
       if(algorithm == "opra"){
         
-        //opra(list);
+        opra(list, frameNum, frameSize, offset);
         
       }else if(algorithm == "fifo"){
         
-        fifo(list, frameNum, frameSize, offset);
+        //fifo(list, frameNum, frameSize, offset);
         
       }else if(algorithm == "lru"){
         
@@ -87,7 +89,7 @@ public class Algorithms{
         
       }else if(algorithm == "hybrid"){
         
-        hybrid(list, frameNum, frameSize, offset);
+        //hybrid(list, frameNum, frameSize, offset);
         
       }
       
@@ -98,15 +100,214 @@ public class Algorithms{
     }
     
   }//end of manager
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
   /*
    * @param 
    * Optimal page replacement algorithm
    */
-  public void opra(){
+  public void opra(ArrayList<Process> list, int frameNum, int frameSize, int offset)
+  {
+    //Instance Variables
+    Process[] myList = new Process[frameNum];//these are the frames
+    virtualAddress = null;
+    physicalAddress = 0;
+    frameSizeB = null;
+    memoryCount = 0;
+    offsetS = null;
+    faultCount = 0;
+    modify = null;
+    pageNum = 1; //frame number, after that its a new page?
+    access = -1;
+    empty = -1;
+    time = 0;
+    
+    //clear the sorting list, make sure it is empty
+    sortingL.clear();
+    
+    //loop through all the process in the list as they come in
+    while(!list.isEmpty())
+    {
+      
+      //obtain the next process to schedule
+      process = list.get(0);
+      pid = process.getPid();
+      list.remove(0); //make sure to remove, avoid duplicates
+      
+      //check if we have to modify any of the frames
+      for(int x = 0; x < frameNum; x++)
+      {
+        
+        if( myList[x] != null)
+        {
+          
+          //check if any of the spots are a hit
+          if(pid != myList[x].getPid())
+          {
+            
+            modify = true;
+            
+            //else if not null and equal, it means we have a hit
+          }else
+          {
+            
+            access = x;
+            modify = false;
+            break;
+          }
+          
+          //means that there is an empty spot
+        }else
+        {
+          
+          empty = x;
+          modify = true;
+          break;
+        }
+      }
+      
+      //If we have to modify, calculate which frame to modify
+      if(modify == true)
+      {
+        
+        //reads only acces memory once
+        if(process.getReadWrite().equals("R"))
+        {
+          
+          memoryCount++;
+          
+          //if dirty must access memory twice
+        }else if(process.getReadWrite().equals("W"))
+        {
+          
+          memoryCount = memoryCount + 2;
+        }
+        
+        //if there is a space open
+        if(empty != -1)
+        {
+          
+          //assign the process to the empty space/frame
+          myList[empty] = process;
+          
+          //get binary rep of the virtual address
+          virtualAddress = Integer.toBinaryString((process.getAddress()));
+          
+          //get the offset bits
+          virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+          offsetS = virtualAddress.substring(0,offset);
+          offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
+          
+          //translate the virtual adress to physical address
+          //convert to binary string
+          frameSizeB = Integer.toBinaryString((frameSize*empty));
+          frameSizeB = frameSizeB.concat(offsetS);
+          physicalAddress = Integer.parseInt(frameSizeB,2);
+          
+          //print information
+          System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ empty +" with no replacement.");
+          System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
+          
+          //reset the empty variable
+          empty = -1;
+        }else
+        {
+          
+          //add to sorting list
+          for(int x = 0; x < frameNum; x++)
+          {
+            
+            sortingL.add(myList[x]);
+            
+          }
+          
+          processList = list;//sets the processlist to list, keeps track of the remaining processes
+          
+          //sorting list gives us process that has the lowest allocation time
+          //aka first one to be allocated out of the list
+          sort(sortingL, "optimal");
+          
+          //get the first one allocated to the frames
+          //list is sorted already 
+          process1 = sortingL.get(0);
+          sortingL.clear();//make sure to clear, dont want repeated processes or old ones
+          
+          //check which full frame to replace
+          for(int x = 0; x < frameNum; x++)
+          {
+            
+            if(process1.getPid() == myList[x].getPid() )
+            {
+              
+              myList[x] = process;
+              process.setAllocationTime(time);
+              
+              //get binary rep of the virtual address
+              virtualAddress = Integer.toBinaryString((process.getAddress()));
+              
+              //get the offset bits
+              virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+              offsetS = virtualAddress.substring(0,offset);
+              offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
+              
+              //translate the virtual adress to physical address
+              //convert to binary string
+              frameSizeB = Integer.toBinaryString((frameSize*x));
+              frameSizeB = frameSizeB.concat(offsetS);
+              physicalAddress = Integer.parseInt(frameSizeB,2);
+              
+              //print frame information
+              System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ x +" with replacement.");
+              System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
+              break;
+            }
+            
+          }
+        }
+        
+        //since we modified we have a page fault
+        faultCount ++;
+        
+        //if not modifications just print info and move on
+      }else
+      {
+        
+        //check for dirty bit
+        if(process.getReadWrite().equals("W"))
+        {
+          
+          memoryCount++;
+        }
+        
+        //get binary rep of the virtual address
+        virtualAddress = Integer.toBinaryString((process.getAddress()));
+        
+        //get the offset bits
+        virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+        offsetS = virtualAddress.substring(0,offset);
+        offsetS = new StringBuilder(offsetS).reverse().toString();//reverse offset to get actual value
+        
+        //translate the virtual adress to physical address
+        //convert to binary string
+        frameSizeB = Integer.toBinaryString((frameSize*access));
+        frameSizeB = frameSizeB.concat(offsetS);
+        physicalAddress = Integer.parseInt(frameSizeB,2);
+        
+        //print frame information
+        System.out.println("no page fault. accessed frame #"+ access);
+        System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
+        
+      }
+      
+      //time helps us determine how long/when a process was allocated
+      time++; 
+      
+    }
+    
+    //print summary info
+    System.out.println("Number of page faults: " + faultCount +". Number of memory accesses: " + memoryCount);
     
   }//end of opra
-  
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /*
    * @param list contains the process to be scheduled
    * @param frameNumber is the frame numbers to use in the scheduler
@@ -196,7 +397,7 @@ public class Algorithms{
           offsetS = virtualAddress.substring(0,offset);
           offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
           
-          //translate the virtual adress to physical address
+          //translate the virtual address to physical address
           //convert to binary string
           frameSizeB = Integer.toBinaryString((frameSize*empty));
           frameSizeB = frameSizeB.concat(offsetS);
@@ -303,7 +504,206 @@ public class Algorithms{
    * @param 
    * LRU least recently used
    */
-  public void lru(){
+  public void lru(ArrayList<Process> list, int frameNum, int frameSize, int offset)
+  {
+    //Instance Variables
+    Process[] myList = new Process[frameNum];//these are the frames
+    virtualAddress = null;
+    physicalAddress = 0;
+    frameSizeB = null;
+    memoryCount = 0;
+    offsetS = null;
+    faultCount = 0;
+    modify = null;
+    pageNum = 1; //frame number, after that its a new page?
+    access = -1;
+    empty = -1;
+    time = 0;
+    
+    //clear the sorting list, make sure it is empty
+    sortingL.clear();
+    
+    //loop through all the process in the list as they come in
+    while(!list.isEmpty())
+    {
+      
+      //obtain the next process to schedule
+      process = list.get(0);
+      pid = process.getPid();
+      oldList.add(list.remove(0)); //make sure to remove, avoid duplicates, adds to old list
+      
+      //check if we have to modify any of the frames
+      for(int x = 0; x < frameNum; x++)
+      {
+        
+        if( myList[x] != null)
+        {
+          
+          //check if any of the spots are a hit
+          if(pid != myList[x].getPid())
+          {
+            
+            modify = true;
+            
+            //else if not null and equal, it means we have a hit
+          }else
+          {
+            
+            access = x;
+            modify = false;
+            break;
+          }
+          
+          //means that there is an empty spot
+        }else
+        {
+          
+          empty = x;
+          modify = true;
+          break;
+        }
+      }
+      
+      //If we have to modify, calculate which frame to modify
+      if(modify == true)
+      {
+        
+        //reads only acces memory once
+        if(process.getReadWrite().equals("R"))
+        {
+          
+          memoryCount++;
+          
+          //if dirty must access memory twice
+        }else if(process.getReadWrite().equals("W"))
+        {
+          
+          memoryCount = memoryCount + 2;
+        }
+        
+        //if there is a space open
+        if(empty != -1)
+        {
+          
+          //assign the process to the empty space/frame
+          myList[empty] = process;
+          
+          //get binary rep of the virtual address
+          virtualAddress = Integer.toBinaryString((process.getAddress()));
+          
+          //get the offset bits
+          virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+          offsetS = virtualAddress.substring(0,offset);
+          offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
+          
+          //translate the virtual adress to physical address
+          //convert to binary string
+          frameSizeB = Integer.toBinaryString((frameSize*empty));
+          frameSizeB = frameSizeB.concat(offsetS);
+          physicalAddress = Integer.parseInt(frameSizeB,2);
+          
+          //print information
+          System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ empty +" with no replacement.");
+          System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
+          
+          //reset the empty variable
+          empty = -1;
+        }else
+        {
+          
+          //add to sorting list
+          for(int x = 0; x < frameNum; x++)
+          {
+            
+            sortingL.add(myList[x]);
+            
+          }
+          
+          processList = list;//sets the processlist to list, keeps track of the remaining processes
+          
+          //sorting list gives us process that has the lowest allocation time
+          //aka first one to be allocated out of the list
+          sort(sortingL, "lru");
+          
+          //get the first one allocated to the frames
+          //list is sorted already 
+          process1 = sortingL.get(0);
+          sortingL.clear();//make sure to clear, dont want repeated processes or old ones
+          
+          //check which full frame to replace
+          for(int x = 0; x < frameNum; x++)
+          {
+            
+            if(process1.getPid() == myList[x].getPid() )
+            {
+              
+              myList[x] = process;
+              process.setAllocationTime(time);
+              
+              //get binary rep of the virtual address
+              virtualAddress = Integer.toBinaryString((process.getAddress()));
+              
+              //get the offset bits
+              virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+              offsetS = virtualAddress.substring(0,offset);
+              offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
+              
+              //translate the virtual adress to physical address
+              //convert to binary string
+              frameSizeB = Integer.toBinaryString((frameSize*x));
+              frameSizeB = frameSizeB.concat(offsetS);
+              physicalAddress = Integer.parseInt(frameSizeB,2);
+              
+              //print frame information
+              System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ x +" with replacement.");
+              System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
+              break;
+            }
+            
+          }
+        }
+        
+        //since we modified we have a page fault
+        faultCount ++;
+        
+        //if not modifications just print info and move on
+      }else
+      {
+        
+        //check for dirty bit
+        if(process.getReadWrite().equals("W"))
+        {
+          
+          memoryCount++;
+        }
+        
+        //get binary rep of the virtual address
+        virtualAddress = Integer.toBinaryString((process.getAddress()));
+        
+        //get the offset bits
+        virtualAddress = new StringBuilder(virtualAddress).reverse().toString();
+        offsetS = virtualAddress.substring(0,offset);
+        offsetS = new StringBuilder(offsetS).reverse().toString();//reverse offset to get actual value
+        
+        //translate the virtual adress to physical address
+        //convert to binary string
+        frameSizeB = Integer.toBinaryString((frameSize*access));
+        frameSizeB = frameSizeB.concat(offsetS);
+        physicalAddress = Integer.parseInt(frameSizeB,2);
+        
+        //print frame information
+        System.out.println("no page fault. accessed frame #"+ access);
+        System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
+        
+      }
+      
+      //time helps us determine how long/when a process was allocated
+      time++; 
+      
+    }
+    
+    //print summary info
+    System.out.println("Number of page faults: " + faultCount +". Number of memory accesses: " + memoryCount);
     
   }//end of lru
   
@@ -544,7 +944,9 @@ public class Algorithms{
    * @param order specifies the way to sort the list
    * @returns ArrayList<Process> a sorted list of process according to their arrival time
    */ 
-  public ArrayList<Process> sort(ArrayList<Process> list, String order){
+  public ArrayList<Process> sort(ArrayList<Process> list, String order)
+  {
+    HashMap<Integer,Integer> processTimes = new HashMap<Integer,Integer>();//pids and times
     
     //lower values are first: 0 1 2 3 4 5 
     if(order == "allocationTime min-max"){
@@ -566,6 +968,97 @@ public class Algorithms{
           
         }
         
+      }
+    }else if(order.equalsIgnoreCase("lru"))
+    {
+      for(int i = 0; i<oldList.size(); i++)
+      {
+        //filling hashmap with pids and times
+        if(!processTimes.containsKey(oldList.get(i).getPid()))
+        {
+          processTimes.put(oldList.get(i).getPid(), i);//pid and when found
+        }
+      }
+      
+      for(int i = 0; i<list.size()-1; i++)
+      {
+        if(processTimes.containsKey(list.get(i).getPid()) && processTimes.containsKey(list.get(i+1).getPid()))
+        {
+          //comparing the times, higher means used more recently
+          if(processTimes.get(list.get(i).getPid()) > processTimes.get(list.get(i).getPid()))
+          {
+            Process proc = list.get(i);
+            list.set(i,list.get(i+1));
+            list.set(i+1, proc);
+            i=0;//resets if a change was made to the list
+          }
+          
+          //if process not found then it will be set as the next to be removed
+          //meaning it has never been used before
+        }else if(processTimes.containsKey(list.get(i+1).getPid()))
+        {
+          processTimes.put(list.get(i).getPid(),0);//not found so pid should be lower than earlier
+          list.add(list.remove(i));
+          i=0;
+        }else if(processTimes.containsKey(list.get(i).getPid()))
+        {
+          processTimes.put(list.get(i+1).getPid(),0);//not found so pid should be lower than earlier
+          list.add(list.remove(i+1));
+          i=0;
+        }else//neither i nor i+1 found
+        {
+          processTimes.put(list.get(i).getPid(),0);//not found so pid should be lower than earlier
+          list.add(list.remove(i));
+          processTimes.put(list.get(i+1).getPid(),0);//not found so pid should be lower than earlier
+          list.add(list.remove(i+1));
+          i=0;
+        }
+      }
+      
+    }else if(order.equalsIgnoreCase("optimal"))
+    {
+      for(int i = 0; i<processList.size(); i++)
+      {
+        //filling hashmap with pids and times
+        if(!processTimes.containsKey(processList.get(i).getPid()))
+        {
+          processTimes.put(processList.get(i).getPid(), -i);//pid and negative when found
+        }
+      }
+      
+      for(int i = 0; i<list.size()-1; i++)
+      {
+        if(processTimes.containsKey(list.get(i).getPid()) && processTimes.containsKey(list.get(i+1).getPid()))
+        {
+          //comparing the times
+          if(processTimes.get(list.get(i).getPid()) < processTimes.get(list.get(i).getPid()))
+          {
+            Process proc = list.get(i);
+            list.set(i,list.get(i+1));
+            list.set(i+1, proc);
+            i=0;//resets if a change was made to the list
+          }
+          
+          //if process not found then it will be set as the next to be removed
+          //meaning the process will not occur again
+        }else if(processTimes.containsKey(list.get(i+1).getPid()))
+        {
+          processTimes.put(list.get(i).getPid(),0);//not found so pid should be higher than negatives earlier
+          list.add(list.remove(i));
+          i=0;
+        }else if(processTimes.containsKey(list.get(i).getPid()))
+        {
+          processTimes.put(list.get(i+1).getPid(),0);//not found so pid should be higher than negatives earlier
+          list.add(list.remove(i+1));
+          i=0;
+        }else//neither i nor i+1 found
+        {
+          processTimes.put(list.get(i).getPid(),0);//not found so pid should be higher than negatives earlier
+          list.add(list.remove(i));
+          processTimes.put(list.get(i+1).getPid(),0);//not found so pid should be higher than negatives earlier
+          list.add(list.remove(i+1));
+          i=0;
+        }
       }
     }
     
