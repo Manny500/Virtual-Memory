@@ -52,8 +52,7 @@ public class Algorithms{
     int offset = physicalSizeRep - pageSizebitRep; 
     int frameSize = (result/frameNum); //calculate the size of each frame
     
-    //check if the pagesize is between the allowed range and a power of two
-    if( (result >= 32) && (result <= 512) && ((result & (result - 1)) == 0)){
+    if( (result >= 32) && (result <= 512) && (result % 2) == 0){
       
       //parse input file
       File processFile = new File(fileName); 
@@ -97,7 +96,7 @@ public class Algorithms{
       
     }else{
       
-      System.out.println("Page size is not between the allowed range or not a power of two");
+      System.out.println("Page size is not between the allowed range");
       
     }
     
@@ -110,7 +109,7 @@ public class Algorithms{
   public void opra(ArrayList<Process> list, int frameNum, int frameSize, int offset)
   {
     //Instance Variables
-    Process[] myList = new Process[frameNum];//these are the frames
+    Process[] myList = new Process[frameNum];
     virtualAddress = null;
     physicalAddress = 0;
     frameSizeB = null;
@@ -127,8 +126,7 @@ public class Algorithms{
     sortingL.clear();
     
     //loop through all the process in the list as they come in
-    while(!list.isEmpty())
-    {
+    while(!list.isEmpty()){
       
       //obtain the next process to schedule
       process = list.get(0);
@@ -136,21 +134,17 @@ public class Algorithms{
       list.remove(0); //make sure to remove, avoid duplicates
       
       //check if we have to modify any of the frames
-      for(int x = 0; x < frameNum; x++)
-      {
+      for(int x = 0; x < frameNum; x++){
         
-        if( myList[x] != null)
-        {
+        if( myList[x] != null){
           
           //check if any of the spots are a hit
-          if(pid != myList[x].getPid())
-          {
+          if(pid != myList[x].getPid()){
             
             modify = true;
             
             //else if not null and equal, it means we have a hit
-          }else
-          {
+          }else{
             
             access = x;
             modify = false;
@@ -158,8 +152,7 @@ public class Algorithms{
           }
           
           //means that there is an empty spot
-        }else
-        {
+        }else{
           
           empty = x;
           modify = true;
@@ -168,27 +161,16 @@ public class Algorithms{
       }
       
       //If we have to modify, calculate which frame to modify
-      if(modify == true)
-      {
+      if(modify == true){
         
         //reads only acces memory once
-        if(process.getReadWrite().equals("R"))
-        {
-          
-          memoryCount++;
-          
-          //if dirty must access memory twice
-        }else if(process.getReadWrite().equals("W"))
-        {
-          
-          memoryCount = memoryCount + 2;
-        }
+        
         
         //if there is a space open
-        if(empty != -1)
-        {
+        if(empty != -1){
           
           //assign the process to the empty space/frame
+          process.setAllocationTime(time);
           myList[empty] = process;
           
           //get binary rep of the virtual address
@@ -199,11 +181,22 @@ public class Algorithms{
           offsetS = virtualAddress.substring(0,offset);
           offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
           
-          //translate the virtual adress to physical address
+          //translate the virtual address to physical address
           //convert to binary string
           frameSizeB = Integer.toBinaryString((frameSize*empty));
           frameSizeB = frameSizeB.concat(offsetS);
           physicalAddress = Integer.parseInt(frameSizeB,2);
+          
+          if(process.getReadWrite().equals("R")){
+          
+          memoryCount++;
+          
+          //if dirty must access memory twice
+          }else if(process.getReadWrite().equals("W")){
+            
+            System.out.println("     Needed to write frame #" + empty + " to memory");
+            memoryCount = memoryCount + 2;
+          }
           
           //print information
           System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ empty +" with no replacement.");
@@ -211,19 +204,15 @@ public class Algorithms{
           
           //reset the empty variable
           empty = -1;
-        }else
-        {
+        }else{
           
           //add to sorting list
-          for(int x = 0; x < frameNum; x++)
-          {
+          for(int x = 0; x < frameNum; x++){
             
             sortingL.add(myList[x]);
             
           }
-          
-          processList = list;//sets the processlist to list, keeps track of the remaining processes
-          
+          processList = list;//setting the process list to the remaining processes
           //sorting list gives us process that has the lowest allocation time
           //aka first one to be allocated out of the list
           sort(sortingL, "optimal");
@@ -234,11 +223,9 @@ public class Algorithms{
           sortingL.clear();//make sure to clear, dont want repeated processes or old ones
           
           //check which full frame to replace
-          for(int x = 0; x < frameNum; x++)
-          {
+          for(int x = 0; x < frameNum; x++){
             
-            if(process1.getPid() == myList[x].getPid() )
-            {
+            if(process1.getPid() == myList[x].getPid() ){
               
               myList[x] = process;
               process.setAllocationTime(time);
@@ -257,6 +244,19 @@ public class Algorithms{
               frameSizeB = frameSizeB.concat(offsetS);
               physicalAddress = Integer.parseInt(frameSizeB,2);
               
+              //reads only acces memory once
+              if(process.getReadWrite().equals("R")){
+                
+                memoryCount++;
+                
+                //if dirty must access memory twice
+              }else if(process.getReadWrite().equals("W")){
+                
+                System.out.println("     Needed to write frame #" + x + " to memory");
+                
+                memoryCount = memoryCount + 2;
+              }
+              
               //print frame information
               System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ x +" with replacement.");
               System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
@@ -270,13 +270,12 @@ public class Algorithms{
         faultCount ++;
         
         //if not modifications just print info and move on
-      }else
-      {
+      }else{
         
         //check for dirty bit
-        if(process.getReadWrite().equals("W"))
-        {
+        if(process.getReadWrite().equals("W")){
           
+          System.out.println("     Needed to write frame #" + access + " to memory");
           memoryCount++;
         }
         
@@ -374,6 +373,9 @@ public class Algorithms{
       //If we have to modify, calculate which frame to modify
       if(modify == true){
         
+        //reads only acces memory once
+        
+        
         //if there is a space open
         if(empty != -1){
           
@@ -395,16 +397,14 @@ public class Algorithms{
           frameSizeB = frameSizeB.concat(offsetS);
           physicalAddress = Integer.parseInt(frameSizeB,2);
           
-          //reads only acces memory once
           if(process.getReadWrite().equals("R")){
-            
-            memoryCount++;
-            
-            //if dirty must access memory twice
+          
+          memoryCount++;
+          
+          //if dirty must access memory twice
           }else if(process.getReadWrite().equals("W")){
             
             System.out.println("     Needed to write frame #" + empty + " to memory");
-            
             memoryCount = memoryCount + 2;
           }
           
@@ -526,7 +526,7 @@ public class Algorithms{
   public void lru(ArrayList<Process> list, int frameNum, int frameSize, int offset)
   {
     //Instance Variables
-    Process[] myList = new Process[frameNum];//these are the frames
+    Process[] myList = new Process[frameNum];
     virtualAddress = null;
     physicalAddress = 0;
     frameSizeB = null;
@@ -543,30 +543,25 @@ public class Algorithms{
     sortingL.clear();
     
     //loop through all the process in the list as they come in
-    while(!list.isEmpty())
-    {
+    while(!list.isEmpty()){
       
       //obtain the next process to schedule
       process = list.get(0);
       pid = process.getPid();
-      oldList.add(list.remove(0)); //make sure to remove, avoid duplicates, adds to old list
+      oldList.add(list.remove(0)); //make sure to remove, avoid duplicates
       
       //check if we have to modify any of the frames
-      for(int x = 0; x < frameNum; x++)
-      {
+      for(int x = 0; x < frameNum; x++){
         
-        if( myList[x] != null)
-        {
+        if( myList[x] != null){
           
           //check if any of the spots are a hit
-          if(pid != myList[x].getPid())
-          {
+          if(pid != myList[x].getPid()){
             
             modify = true;
             
             //else if not null and equal, it means we have a hit
-          }else
-          {
+          }else{
             
             access = x;
             modify = false;
@@ -574,8 +569,7 @@ public class Algorithms{
           }
           
           //means that there is an empty spot
-        }else
-        {
+        }else{
           
           empty = x;
           modify = true;
@@ -584,27 +578,16 @@ public class Algorithms{
       }
       
       //If we have to modify, calculate which frame to modify
-      if(modify == true)
-      {
+      if(modify == true){
         
         //reads only acces memory once
-        if(process.getReadWrite().equals("R"))
-        {
-          
-          memoryCount++;
-          
-          //if dirty must access memory twice
-        }else if(process.getReadWrite().equals("W"))
-        {
-          
-          memoryCount = memoryCount + 2;
-        }
+        
         
         //if there is a space open
-        if(empty != -1)
-        {
+        if(empty != -1){
           
           //assign the process to the empty space/frame
+          process.setAllocationTime(time);
           myList[empty] = process;
           
           //get binary rep of the virtual address
@@ -615,11 +598,22 @@ public class Algorithms{
           offsetS = virtualAddress.substring(0,offset);
           offsetS = new StringBuilder(offsetS).reverse().toString(); //reverse offset to get actual value
           
-          //translate the virtual adress to physical address
+          //translate the virtual address to physical address
           //convert to binary string
           frameSizeB = Integer.toBinaryString((frameSize*empty));
           frameSizeB = frameSizeB.concat(offsetS);
           physicalAddress = Integer.parseInt(frameSizeB,2);
+          
+          if(process.getReadWrite().equals("R")){
+          
+          memoryCount++;
+          
+          //if dirty must access memory twice
+          }else if(process.getReadWrite().equals("W")){
+            
+            System.out.println("     Needed to write frame #" + empty + " to memory");
+            memoryCount = memoryCount + 2;
+          }
           
           //print information
           System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ empty +" with no replacement.");
@@ -627,18 +621,14 @@ public class Algorithms{
           
           //reset the empty variable
           empty = -1;
-        }else
-        {
+        }else{
           
           //add to sorting list
-          for(int x = 0; x < frameNum; x++)
-          {
+          for(int x = 0; x < frameNum; x++){
             
             sortingL.add(myList[x]);
             
           }
-          
-          processList = list;//sets the processlist to list, keeps track of the remaining processes
           
           //sorting list gives us process that has the lowest allocation time
           //aka first one to be allocated out of the list
@@ -650,11 +640,9 @@ public class Algorithms{
           sortingL.clear();//make sure to clear, dont want repeated processes or old ones
           
           //check which full frame to replace
-          for(int x = 0; x < frameNum; x++)
-          {
+          for(int x = 0; x < frameNum; x++){
             
-            if(process1.getPid() == myList[x].getPid() )
-            {
+            if(process1.getPid() == myList[x].getPid() ){
               
               myList[x] = process;
               process.setAllocationTime(time);
@@ -673,6 +661,19 @@ public class Algorithms{
               frameSizeB = frameSizeB.concat(offsetS);
               physicalAddress = Integer.parseInt(frameSizeB,2);
               
+              //reads only acces memory once
+              if(process.getReadWrite().equals("R")){
+                
+                memoryCount++;
+                
+                //if dirty must access memory twice
+              }else if(process.getReadWrite().equals("W")){
+                
+                System.out.println("     Needed to write frame #" + x + " to memory");
+                
+                memoryCount = memoryCount + 2;
+              }
+              
               //print frame information
               System.out.println("loaded page #"+ pageNum +" of processes #"+ process.getPid() + " to frame #"+ x +" with replacement.");
               System.out.println("     Virtual Address: " + process.getAddress() + " -> Physical Address: " + physicalAddress);
@@ -686,13 +687,12 @@ public class Algorithms{
         faultCount ++;
         
         //if not modifications just print info and move on
-      }else
-      {
+      }else{
         
         //check for dirty bit
-        if(process.getReadWrite().equals("W"))
-        {
+        if(process.getReadWrite().equals("W")){
           
+          System.out.println("     Needed to write frame #" + access + " to memory");
           memoryCount++;
         }
         
@@ -747,9 +747,7 @@ public class Algorithms{
    * @param frameNumber is the frame numbers to use in the scheduler
    * @param frameSize is the size of each frame
    * @param offset is the number of digits needed for the offset
-   * Hybrid Replace pages that haven’t been referenced for one complete revolution of the clock
-   * Goes around looking for a reference bit = 0, if it finds a bit = 0 then it replaces that page
-   * if the page is 1, it sets the bit to zero and moves on
+   * Hybrid is a modification of the fifo algorithm, algorithm called clock
    */
   public void hybrid(ArrayList<Process> list, int frameNum, int frameSize, int offset){
     
@@ -963,6 +961,7 @@ public class Algorithms{
     //print summary info
     System.out.println("Number of page faults: " + faultCount +". Number of memory accesses: " + memoryCount);
     
+
   }//end of hybrid
   
   /*
