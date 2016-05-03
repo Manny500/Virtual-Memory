@@ -25,7 +25,7 @@ public class Process{
     this.readWrite = readWrite;
     this.address = address;
     this.allocationTime = 0;
-    this.usedBit = 1;
+    this.usedBit = -1;
     
   }
 ////////////////////////////METHODS//////////////////////////////////

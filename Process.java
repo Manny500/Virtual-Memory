@@ -13,6 +13,9 @@ public class Process{
   int address;
   int usedBit;
   int pid;
+  int modBit; //the second chance bit
+  int refBit; //the esca bit
+  
 
   //Constructors
   public Process(){
@@ -26,6 +29,8 @@ public class Process{
     this.address = address;
     this.allocationTime = 0;
     this.usedBit = -1;
+    this.modBit = 0;
+    this.refBit = 0;
     
   }
 ////////////////////////////METHODS//////////////////////////////////
@@ -119,6 +124,54 @@ public class Process{
     
     this.usedBit = usedBit;
   }//end of setusedBit
+  
+  /*
+   * will switch the second chance bit to 0
+   */
+  public void sc0()
+  {
+    this.modBit = 0;
+  }
+  
+  /*
+   * will switch the second chance bit to 1
+   */
+  public void sc1()
+  {
+    this.modBit = 1;
+  }
+  
+  /*
+   * will return the second chance bit
+   */
+  public int getChance()
+  {
+    return this.modBit;
+  }
+  
+  /*
+   * will set the reference bit to 0
+   */
+  public void ref0()
+  {
+    this.refBit = 0;
+  }
+  
+  /*
+   * will set the reference bit to 1
+   */
+  public void ref1()
+  {
+    this.refBit = 1;
+  }
+  
+  /*
+   * will return the reference bit
+   */
+  public int getRef()
+  {
+    return this.refBit;
+  }
   
 ////////////////////////End of Methods//////////////////////////////////////////////////// 
 }//end of process

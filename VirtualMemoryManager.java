@@ -14,8 +14,12 @@ public class VirtualMemoryManager{
     
     //generate Large process file, analysis purposes
     //"algorithm", "page size 32-512B (must be a power of two) (check that it is in that range)", "Input file name"
+    //alg.manager("opra", "512", "Small-Input-Processess.txt");
     //alg.manager("fifo", "512", "Small-Input-Processess.txt");
-    alg.manager("hybrid", "512", "Small-Input-Processess.txt");
+    //alg.manager("lru", "512", "Small-Input-Processess.txt");
+    alg.manager("sca", "512", "Small-Input-Processess.txt");
+    //alg.manager("esca", "512", "Small-Input-Processess.txt");
+    //alg.manager("hybrid", "512", "Small-Input-Processess.txt");
     
   }//end of Main
 }//end of Virtual-Memory-Manager
