@@ -12,11 +12,10 @@ public class Process{
   int allocationTime;
   int address;
   int usedBit;
-  int pid;
   int modBit; //the second chance bit
   int refBit; //the esca bit
+  int pid;
   
-
   //Constructors
   public Process(){
     
@@ -34,7 +33,7 @@ public class Process{
     
   }
 ////////////////////////////METHODS//////////////////////////////////
-
+  
   /*
    * @return int gets the pid of the process
    * will get the pid of the process
@@ -44,7 +43,7 @@ public class Process{
     return this.pid;
   }//end of getPid
   
-   /*
+  /*
    * @return int gets the pid of the process
    * will get the pid of the process
    */
@@ -70,7 +69,7 @@ public class Process{
     
     this.address = address;
   }//end of setAddress
- 
+  
   /*
    * @return int gets the ReadWrite of the process
    * will get the ReadWrite of the process
@@ -107,7 +106,7 @@ public class Process{
     this.allocationTime = time;
   }//end of getallocationTime
   
-   /*
+  /*
    * @return int gets the usedBit of the process
    * will get the usedBit of the process
    */
@@ -116,7 +115,7 @@ public class Process{
     return this.usedBit;
   }//end of getusedBit
   
-   /*
+  /*
    * @return int gets the usedBit of the process
    * will get the usedBit of the process
    */
@@ -128,50 +127,52 @@ public class Process{
   /*
    * will switch the second chance bit to 0
    */
-  public void sc0()
-  {
+  public void sc0(){
+    
     this.modBit = 0;
-  }
+  }//edn of sc0
   
   /*
    * will switch the second chance bit to 1
    */
-  public void sc1()
-  {
+  public void sc1(){
+    
     this.modBit = 1;
-  }
+  }//end of sc1
   
   /*
+   * @return int is the modBit
    * will return the second chance bit
    */
-  public int getChance()
-  {
+  public int getChance(){
+    
     return this.modBit;
-  }
+  }//end of getChance
   
   /*
    * will set the reference bit to 0
    */
-  public void ref0()
-  {
+  public void ref0(){
+    
     this.refBit = 0;
-  }
+  }//end of ref0
   
   /*
    * will set the reference bit to 1
    */
-  public void ref1()
-  {
+  public void ref1(){
+    
     this.refBit = 1;
-  }
+  }//end of refBit
   
   /*
+   * @return int is the refBit
    * will return the reference bit
    */
-  public int getRef()
-  {
+  public int getRef(){
+    
     return this.refBit;
-  }
+  }//end of getRef
   
 ////////////////////////End of Methods//////////////////////////////////////////////////// 
 }//end of process

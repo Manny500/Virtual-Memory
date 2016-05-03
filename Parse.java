@@ -54,7 +54,7 @@ public class Parse{
       String line;
       String[] lineVector;
       String str;
-        
+      
       //this loop goes through the file and scans until the very end
       while (sc.hasNextLine()){ 
         
