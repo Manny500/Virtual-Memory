@@ -744,6 +744,7 @@ public class Algorithms{
   }//end of lru
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /*
+   * functioning properly
    * @param
    * Second Chance Algorithm
    */
@@ -972,6 +973,7 @@ public class Algorithms{
   }//end of sca
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /*
+   * functioning properly
    * @param
    * Enhanced second chance algorithm
    */
@@ -990,6 +992,7 @@ public class Algorithms{
     access = -1;
     empty = -1;
     time = 0;
+    int curFrame = 0;//used to cycle through frames in round robin fashion
     
     //clear the sorting list, make sure it is empty
     sortingL.clear();
@@ -1002,9 +1005,8 @@ public class Algorithms{
       pid = process.getPid();
       list.remove(0); //make sure to remove, avoid duplicates
       process.sc1();
-      //process.setAllocationTime(time);
-      oldList.add(process);
-      
+      process.ref0();
+
       //check if we have to modify any of the frames
       for(int x = 0; x < frameNum; x++){
         
@@ -1036,14 +1038,12 @@ public class Algorithms{
       if(modify == true){
         
         //reads only acces memory once
-        
         process.ref1();
         
         //if there is a space open
         if(empty != -1){
           
           //assign the process to the empty space/frame
-          process.setAllocationTime(time);
           process.sc0();
           
           myList[empty] = process;
@@ -1064,12 +1064,13 @@ public class Algorithms{
           
           if(process.getReadWrite().equals("R")){
           
-            
+            process.sc1();
             memoryCount++;
           
           //if dirty must access memory twice
           }else if(process.getReadWrite().equals("W")){
             
+            process.ref1();
             
             System.out.println("     Needed to write frame #" + empty + " to memory");
             memoryCount = memoryCount + 2;
@@ -1088,7 +1089,9 @@ public class Algorithms{
           {
             if(myList[x].getChance()==0 && myList[x].getRef()==0)
             {
-              sortingL.add(myList[x]);
+              process1 = myList[x];
+              curFrame = x;
+              break;
             }else if(myList[x].getChance()==0 && myList[x].getRef()==1)
             {
               myList[x].ref0();
@@ -1098,35 +1101,24 @@ public class Algorithms{
               myList[x].ref1();
             }else if(myList[x].getChance()==1 && myList[x].getRef()==1)
             {
+              myList[x].sc1();
               myList[x].ref0();
             }
             
-            if(sortingL.size()==0 && x==frameNum-1)
+            if(x==frameNum-1)
             {
               x=0;
-            }else if(sortingL.size()>0)
-            {
-              break;
             }
             
           }
-          processList = list;//setting the process list to the remaining processes
-          //sorting list gives us process that has the lowest allocation time
-          //aka first one to be allocated out of the list
-          //sort(sortingL, "esca");
-          
-          //get the first one allocated to the frames
-          //list is sorted already 
-          
-          process = sortingL.get(0);
-          sortingL.clear();//make sure to clear, dont want repeated processes or old ones
           
           //check which full frame to replace
-          for(int x = 0; x < frameNum; x++){
+          for(int x = 0; x < frameNum; x++)
+          {
             
-            if(process.getPid() == myList[x].getPid() ){
-              
-              process.setAllocationTime(time);
+            if(process1.getPid() == myList[x].getPid() )
+            {
+              process.sc0();
               myList[x] = process;
               
               //get binary rep of the virtual address
@@ -1171,9 +1163,20 @@ public class Algorithms{
         //if not modifications just print info and move on
       }else{
         
+        for(int x = 0; x < frameNum; x++)
+          {
+            if(process.getPid() == myList[x].getPid() )
+            {
+              //System.out.println("setting sc to 1");
+              myList[x].sc1();//used
+              myList[x].ref0();//not modified
+            }
+        }
+        
         //check for dirty bit
         if(process.getReadWrite().equals("W")){
           
+          process.ref1();//modified
           System.out.println("     Needed to write frame #" + access + " to memory");
           memoryCount++;
         }
