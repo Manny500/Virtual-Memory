@@ -17,8 +17,8 @@ public class VirtualMemoryManager{
     //alg.manager("opra", "512", "Small-Input-Processess.txt");
     //alg.manager("fifo", "512", "Small-Input-Processess.txt");
     //alg.manager("lru", "512", "Small-Input-Processess.txt");
-    alg.manager("sca", "512", "Small-Input-Processess.txt");
-    //alg.manager("esca", "512", "Small-Input-Processess.txt");
+    //alg.manager("sca", "512", "Small-Input-Processess.txt");
+    alg.manager("esca", "512", "Small-Input-Processess.txt");
     //alg.manager("hybrid", "512", "Small-Input-Processess.txt");
     
   }//end of Main
