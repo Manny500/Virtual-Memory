@@ -42,6 +42,42 @@ Correctness Results - In this section you should present the results for each re
    		 FD   FD   FD   FD   D         FD   FD   FD   FD   FD   FD        D    =	# of page faults   = 10
 												# of disk accesses = 12
 
+		Output:
+				
+			loaded page #1 of processes #101 to frame #0 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 0
+			loaded page #1 of processes #102 to frame #1 with no replacement.
+				Virtual Address: 512 -> Physical Address: 512
+			loaded page #1 of processes #103 to frame #2 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1024
+			loaded page #1 of processes #104 to frame #3 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1536
+     				Needed to write frame #0 to memory
+			no page fault. accessed frame #0
+     				Virtual Address: 513 -> Physical Address: 1
+			no page fault. accessed frame #1
+     				Virtual Address: 513 -> Physical Address: 513
+			loaded page #1 of processes #105 to frame #0 with replacement.
+     				Virtual Address: 513 -> Physical Address: 1
+			loaded page #1 of processes #101 to frame #1 with replacement.
+     				Virtual Address: 514 -> Physical Address: 514
+			loaded page #1 of processes #102 to frame #2 with replacement.
+     				Virtual Address: 514 -> Physical Address: 1026
+			loaded page #1 of processes #103 to frame #3 with replacement.
+     				Virtual Address: 514 -> Physical Address: 1538
+			loaded page #1 of processes #104 to frame #0 with replacement.
+     				Virtual Address: 514 -> Physical Address: 2
+			loaded page #1 of processes #105 to frame #1 with replacement.
+     				Virtual Address: 515 -> Physical Address: 515
+			no page fault. accessed frame #2
+     				Virtual Address: 515 -> Physical Address: 1027
+     				Needed to write frame #3 to memory
+			no page fault. accessed frame #3
+     				Virtual Address: 515 -> Physical Address: 1539
+			no page fault. accessed frame #0
+     				Virtual Address: 516 -> Physical Address: 0
+			Number of page faults: 10. Number of memory accesses: 12
+			
 	HYBRID:(512B page size)
 
 		101  102  103  104  101  102  105  101  102  103  104  105  102  103  104 
@@ -54,7 +90,43 @@ Correctness Results - In this section you should present the results for each re
    
    		 FD   FD   FD   FD   D         FD   FD   FD   FD   FD   FD        D    =	# of page faults   = 10
 												# of disk accesses = 12
-	
+			
+		Output:
+
+			loaded page #1 of processes #101 to frame #0 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 0
+			loaded page #1 of processes #102 to frame #1 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 512
+			loaded page #1 of processes #103 to frame #2 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1024
+			loaded page #1 of processes #104 to frame #3 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1536
+     				Needed to write frame #0 to memory
+			no page fault. accessed frame #0
+				Virtual Address: 513 -> Physical Address: 1
+			no page fault. accessed frame #1
+     				Virtual Address: 513 -> Physical Address: 513
+			loaded page #1 of processes #105 to frame #0 with replacement.
+     				Virtual Address: 513 -> Physical Address: 1
+			loaded page #1 of processes #101 to frame #1 with replacement.
+     				Virtual Address: 514 -> Physical Address: 514
+			loaded page #1 of processes #102 to frame #2 with replacement.
+     				Virtual Address: 514 -> Physical Address: 1026
+			loaded page #1 of processes #103 to frame #3 with replacement.
+     				Virtual Address: 514 -> Physical Address: 1538
+			loaded page #1 of processes #104 to frame #0 with replacement.
+     				Virtual Address: 514 -> Physical Address: 2
+			loaded page #1 of processes #105 to frame #1 with replacement.
+     				Virtual Address: 515 -> Physical Address: 515
+			no page fault. accessed frame #2
+     				Virtual Address: 515 -> Physical Address: 1027
+     				Needed to write frame #3 to memory
+			no page fault. accessed frame #3
+     				Virtual Address: 515 -> Physical Address: 1539
+			no page fault. accessed frame #0
+     				Virtual Address: 516 -> Physical Address: 0
+			Number of page faults: 10. Number of memory accesses: 12
+
 	OPRA:(512B page size)
 
 		101  102  103  104  101  102  105  101  102  103  104  105  102  103  104 
@@ -67,6 +139,42 @@ Correctness Results - In this section you should present the results for each re
    
    		 FD   FD   FD   FD   D         FD                  FD             D    =	# of page faults   = 6
 												# of disk accesses = 8
+		
+		Output:
+
+			loaded page #1 of processes #101 to frame #0 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 0
+			loaded page #1 of processes #102 to frame #1 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 512
+			loaded page #1 of processes #103 to frame #2 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1024
+			loaded page #1 of processes #104 to frame #3 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1536
+     				Needed to write frame #0 to memory
+			no page fault. accessed frame #0
+     				Virtual Address: 513 -> Physical Address: 1
+			no page fault. accessed frame #1
+     				Virtual Address: 513 -> Physical Address: 513
+			loaded page #1 of processes #105 to frame #3 with replacement.
+     				Virtual Address: 513 -> Physical Address: 1537
+			no page fault. accessed frame #0
+     				Virtual Address: 514 -> Physical Address: 2
+			no page fault. accessed frame #1
+     				Virtual Address: 514 -> Physical Address: 514
+			no page fault. accessed frame #2
+     				Virtual Address: 514 -> Physical Address: 1026
+			loaded page #1 of processes #104 to frame #0 with replacement.
+     				Virtual Address: 514 -> Physical Address: 2
+			no page fault. accessed frame #3
+     				Virtual Address: 515 -> Physical Address: 1539
+			no page fault. accessed frame #1
+     				Virtual Address: 515 -> Physical Address: 515
+     				Needed to write frame #2 to memory
+			no page fault. accessed frame #2
+     				Virtual Address: 515 -> Physical Address: 1027
+			no page fault. accessed frame #0
+     				Virtual Address: 516 -> Physical Address: 0
+			Number of page faults: 6. Number of memory accesses: 8			
 
 	LRU:(512B page size)
 
@@ -80,6 +188,42 @@ Correctness Results - In this section you should present the results for each re
    
    		 FD   FD   FD   FD   D         FD             FD   FD   FD        D    =	# of page faults   = 8
 												# of disk accesses = 10
+		
+		Output:
+
+			loaded page #1 of processes #101 to frame #0 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 0
+			loaded page #1 of processes #102 to frame #1 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 512
+			loaded page #1 of processes #103 to frame #2 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1024
+			loaded page #1 of processes #104 to frame #3 with no replacement.
+    				Virtual Address: 512 -> Physical Address: 1536
+     				Needed to write frame #0 to memory
+			no page fault. accessed frame #0
+     				Virtual Address: 513 -> Physical Address: 1
+			no page fault. accessed frame #1
+    				Virtual Address: 513 -> Physical Address: 513
+			loaded page #1 of processes #105 to frame #2 with replacement.
+     				Virtual Address: 513 -> Physical Address: 1025
+			no page fault. accessed frame #0
+     				Virtual Address: 514 -> Physical Address: 2
+			no page fault. accessed frame #1
+     				Virtual Address: 514 -> Physical Address: 514
+			loaded page #1 of processes #103 to frame #3 with replacement.
+     				Virtual Address: 514 -> Physical Address: 1538
+			loaded page #1 of processes #104 to frame #2 with replacement.
+     				Virtual Address: 514 -> Physical Address: 1026
+			loaded page #1 of processes #105 to frame #0 with replacement.
+     				Virtual Address: 515 -> Physical Address: 3
+			no page fault. accessed frame #1
+     				Virtual Address: 515 -> Physical Address: 515
+     				Needed to write frame #3 to memory
+			no page fault. accessed frame #3
+     				Virtual Address: 515 -> Physical Address: 1539
+			no page fault. accessed frame #2
+     				Virtual Address: 516 -> Physical Address: 1024
+			Number of page faults: 8. Number of memory accesses: 10
 
 	ESCA:(512B page size)
 
@@ -93,8 +237,42 @@ Correctness Results - In this section you should present the results for each re
    
    		 FD   FD   FD   FD   D         FD        FD             FD         D    =	# of page faults   = 7
 												# of disk accesses = 9
-		 										
-												
+					
+		Output:
+
+			loaded page #1 of processes #101 to frame #0 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 0
+			loaded page #1 of processes #102 to frame #1 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 512
+			loaded page #1 of processes #103 to frame #2 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1024
+			loaded page #1 of processes #104 to frame #3 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1536
+     				Needed to write frame #0 to memory
+			no page fault. accessed frame #0
+     				Virtual Address: 513 -> Physical Address: 1
+			no page fault. accessed frame #1
+     				Virtual Address: 513 -> Physical Address: 513
+			loaded page #1 of processes #105 to frame #1 with replacement.
+     				Virtual Address: 513 -> Physical Address: 513
+			no page fault. accessed frame #0
+     				Virtual Address: 514 -> Physical Address: 2
+			loaded page #1 of processes #102 to frame #1 with replacement.
+     				Virtual Address: 514 -> Physical Address: 514
+			no page fault. accessed frame #2
+     				Virtual Address: 514 -> Physical Address: 1026
+			no page fault. accessed frame #3
+     				Virtual Address: 514 -> Physical Address: 1538
+			loaded page #1 of processes #105 to frame #1 with replacement.
+     				Virtual Address: 515 -> Physical Address: 515
+			loaded page #1 of processes #102 to frame #0 with replacement.
+     				Virtual Address: 515 -> Physical Address: 3
+     				Needed to write frame #2 to memory
+			no page fault. accessed frame #2
+     				Virtual Address: 515 -> Physical Address: 1027
+			no page fault. accessed frame #3
+     				Virtual Address: 516 -> Physical Address: 1536
+			Number of page faults: 8. Number of memory accesses: 10
 
 	SCA:(512B page size)
 
@@ -108,6 +286,42 @@ Correctness Results - In this section you should present the results for each re
    
    		 FD   FD   FD   FD   D         FD             FD        FD        D    =	# of page faults   = 7
 												# of disk accesses = 9
+		
+		Output:
+
+			loaded page #1 of processes #101 to frame #0 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 0
+			loaded page #1 of processes #102 to frame #1 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 512
+			loaded page #1 of processes #103 to frame #2 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1024
+			loaded page #1 of processes #104 to frame #3 with no replacement.
+     				Virtual Address: 512 -> Physical Address: 1536
+     				Needed to write frame #0 to memory
+			no page fault. accessed frame #0
+     				Virtual Address: 513 -> Physical Address: 1
+			no page fault. accessed frame #1
+     				Virtual Address: 513 -> Physical Address: 513
+			loaded page #1 of processes #105 to frame #2 with replacement.
+     				Virtual Address: 513 -> Physical Address: 1025
+			no page fault. accessed frame #0
+     				Virtual Address: 514 -> Physical Address: 2
+			no page fault. accessed frame #1
+     				Virtual Address: 514 -> Physical Address: 514
+			loaded page #1 of processes #103 to frame #2 with replacement.
+     				Virtual Address: 514 -> Physical Address: 1026
+			no page fault. accessed frame #3
+     				Virtual Address: 514 -> Physical Address: 1538
+			loaded page #1 of processes #105 to frame #0 with replacement.
+     				Virtual Address: 515 -> Physical Address: 3
+			no page fault. accessed frame #1
+     				Virtual Address: 515 -> Physical Address: 515
+     				Needed to write frame #2 to memory
+			no page fault. accessed frame #2
+     				Virtual Address: 515 -> Physical Address: 1027
+			no page fault. accessed frame #3
+     				Virtual Address: 516 -> Physical Address: 1536
+			Number of page faults: 7. Number of memory accesses: 9
 
 Analysis Results - Using a larger input file (), show a table which compares the results of all different page replacement algorithms.  When generating larger files try to be thoughtful of how you generate them (perhaps use the ideas of working sets).
 

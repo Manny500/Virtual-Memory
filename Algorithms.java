@@ -557,7 +557,7 @@ public class Algorithms{
       //obtain the next process to schedule
       process = list.get(0);
       pid = process.getPid();
-      //make sure to remove, avoid duplicates
+      list.remove(0);//make sure to remove, avoid duplicates
       
       //check if we have to modify any of the frames
       for(int x = 0; x < frameNum; x++){
@@ -636,9 +636,8 @@ public class Algorithms{
           
           //add to sorting list
           for(int x = 0; x < frameNum; x++){
-            //System.out.println("sorting");
-            sortingL.add(myList[x]);
-            
+
+            sortingL.add(myList[x]); 
           }
           
           //sorting list gives us process that has the lowest allocation time
@@ -702,7 +701,7 @@ public class Algorithms{
         //if not modifications just print info and move on
       }else{
         
-        for(int x = 0; x<frameNum; x++){
+        for(int x = 0; x < frameNum; x++){
           
           if(process.getPid() == myList[x].getPid()){
             
