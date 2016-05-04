@@ -18,8 +18,8 @@ public class VirtualMemoryManager{
     //alg.manager("fifo", "256", "Large-Input-Processess.txt");
     //alg.manager("lru", "256", "Large-Input-Processess.txt");
     //alg.manager("sca", "256", "Large-Input-Processess.txt");
-    //alg.manager("esca", "512", "Large-Input-Processess.txt");
-    //alg.manager("hybrid", "512", "Large-Input-Processess.txt");
+    //alg.manager("esca", "256", "Large-Input-Processess.txt");
+    //alg.manager("hybrid", "256", "Large-Input-Processess.txt");
     
   }//end of Main
 }//end of Virtual-Memory-Manager

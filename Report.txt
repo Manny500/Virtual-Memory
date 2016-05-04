@@ -12,7 +12,7 @@ A description of the how each of the page replacement  methods work, including y
 
 	The SCA or second chance algorithm that uses a reference bit to give a process a second chance before being replaced if it has been referenced recently. The way it works is that when a new process comes into memory the algorithm first checks to see if there are any open spaces, if not then it will cycle through the list of frames in a round robin fashion. If the frame has a reference bit set to 1, then it will be changed to 0 and the next frame will be examined. If the bit is set to 0 when it gets checked then that frame will be the one that is replaced. The way a reference bit gets set to 1 is if it is already in memory and that frame gets used again, either for a read or a write, meaning that it was a hit. The reference bit is initially set to 0 when the page is first stored in the frame. This type of algorithm is widely used because it assumes that if a page is used more than once then it's likely to be used again, which does happen quite frequently in real systems.
 	
-	The ESCA or enhanced second chance algorithm is much like the second chance algorithm with the addition of a second bit for modification. The modification bit gets set to 1 when the page is written to, and once that bit has been set then it will stay at 1 for the remainder of the time that it is in the frame. When it's time to replace a frame, the algorithm will cycle through the frames and check both the reference and modification bit in a few stages. The first cycle will check if any of the frames are (0,0), if so then the first one it gets to will be replaced. If there are no frames set to (0,0) then it will look for (0,1). If a frame still hasn't been replaced by this point then the reference bits are changed to 0 and the cycle is repeated. This will change (1,0) and (1,1) to (0,0) and (0,1) respectively. The reason this kind of algorithm is used is because it takes the hardware into consideration and replaces the pages that will be easiest and fastest.
+	The ESCA or enhanced second chance algorithm is much like the second chance algorithm with the addition of a second bit for modification. The modification bit gets set to 1 when the page is written to, and once that bit has been set then it will stay at 1 for the remainder of the time that it is in the frame. When its time to replace a frame, the algorithm will cycle through the frames and check both the reference and modification bit in a few stages. The first cycle will check if any of the frames are (0,0), if so then the first one it gets to will be replaced. If there are no frames set to (0,0) then it will look for (0,1). If a frame still hasn't been replaced by this point then the reference bits are changed to 0 and the cycle is repeated. This will change (1,0) and (1,1) to (0,0) and (0,1) respectively. The reason this kind of algorithm is used is because it takes the hardware into consideration and replaces the pages that will be easiest and fastest.
 		These are the possible bit combinations:
 	(0, 0) - neither recently used nor modified - best page to replace.
 	(0, 1) - not recently used but modified - not as good because we need to swap out a page, but still better than used pages.
@@ -334,61 +334,61 @@ Correctness Results - In this section you should present the results for each re
 
 Analysis Results - Using a larger input file (), show a table which compares the results of all different page replacement algorithms.  When generating larger files try to be thoughtful of how you generate them (perhaps use the ideas of working sets).
 
-	*(512B page size)
+	*The Large input file was made in a way that would test the effectiveness of the algorithms when the least amount of frames are present. That is why when the frame number was high in our analysis the results were very similar.
 
 	Page Size	Algorithm	Page Faults	Memory Accesses		Ranking
 
-	32B		OPRA		19		25
-
-	64B		OPRA		19		25
+	32B		OPRA		19		25			-
 	
-	256B		OPRA		19		19
+	64B		OPRA		19		25			-
+	
+	256B		OPRA		19		19			1
 
 	512B		OPRA		23		29			1
 
-	32B		FIFO		19		25
+	32B		FIFO		19		25			-
 
-	64B		FIFO		19		25
+	64B		FIFO		19		25			-
 	
-	256B		FIFO		19		25
+	256B		FIFO		19		25			3
 
 	512B		FIFO		33		39			4
 
-	32B		LRU 		19		25
+	32B		LRU 		19		25			-
 
-	64B		LRU		19		25
+	64B		LRU		19		25			-
 	
-	256B		LRU		19		25
+	256B		LRU		19		25			2
 	
 	512B		LRU		30		36			2
 
-	32B		SCA 		19		25
+	32B		SCA 		19		25			-
 
-	64B		SCA		19		25
+	64B		SCA		19		25			-
 	
-	256B		SCA		38		44
+	256B		SCA		38		44			6
 
 	512B		SCA		43		49			5
 
-	32B		ESCA 
+	32B		ESCA 		19		25			-
 
-	64B		ESCA
+	64B		ESCA		19		25			-
 	
-	256B		ESCA
+	256B		ESCA		35		41			5
 
 	512B		ESCA		44		50			6
 
-	32B		HYBRID 
+	32B		HYBRID 		19		25			-
 
-	64B		HYBRID
-	
-	256B		HYBRID
+	64B		HYBRID		19		25			-
+		
+	256B		HYBRID		22		28			4
 
 	512B		HYBRID		33		39			3
 
 Conclusion - Which algorithms worked the best and in what cases.
 
-	
+	The objective of this project was too find out which scheduling algorithms worked the best. What the data from our large input file shows is that the algorithm with the best overall times was OPRA, which is no surprise because the optimal replacement algorithm looks ahead in time to calculate what algorithm is not going to be referenced for a while. The OPRA algorithm excels with both a large and small frame number. As we know the smaller the frame number the more frequent the algorithm would have to replace the processes allocated in those frames. Closely followed with overall performance is LRU algorithm. The ranking above show how each of the algorithms performed compared to the others, with 1 being the best and 6 the worst. During our analysis we did notice that the performance of the algorithms deeply depend on the order the processes come in. The FIFO algorithm works best when processes have a repeating pattern, a pattern such as 1 2 3 4 5 5 4 3 2 1 1 2 3 4 5. Otherwise, it might be difficult to predict its performance. The LRU algorithm performs the  best when a program has a large frame number and processes of the same PID occur within that frame number time frame. The SCA algorithm and the ESCA both did the worst in our analysis, but if the file would have had more writes and more hit burst their performance would go up significantly. The Hybrid algorithm is a modification as the FIFO algorithm and as such its performance also depends on repeating patterns. If the program might happen to know the order of the process ahead of time, or has an idea of what processes might appear, the program could choose the best algorithm that serves that specific purpose. However, for overall good performance and feasibility the LRU is the way to go. Note the OPRA is better, but impossible to implement unless all the processes arrive at the same time.
 
 An appendix describing which part of the project each team member was in charge of.
 

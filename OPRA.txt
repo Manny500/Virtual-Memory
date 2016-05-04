@@ -1,3 +1,5 @@
+(32B)
+
      Needed to write frame #0 to memory
 loaded page #16 of processes #105 to frame #0 with no replacement.
      Virtual Address: 513 -> Physical Address: 1
@@ -125,6 +127,8 @@ loaded page #16 of processes #115 to frame #18 with no replacement.
 no page fault. accessed frame #13
      Virtual Address: 528 -> Physical Address: 16
 Number of page faults: 19. Number of memory accesses: 25
+
+(64B)
 
      Needed to write frame #0 to memory
 loaded page #8 of processes #105 to frame #0 with no replacement.
@@ -254,6 +258,8 @@ no page fault. accessed frame #13
      Virtual Address: 528 -> Physical Address: 848
 Number of page faults: 19. Number of memory accesses: 25
 
+(256)
+
      Needed to write frame #0 to memory
 loaded page #2 of processes #105 to frame #0 with no replacement.
      Virtual Address: 513 -> Physical Address: 1
@@ -381,6 +387,8 @@ loaded page #2 of processes #115 to frame #6 with replacement.
 no page fault. accessed frame #7
      Virtual Address: 528 -> Physical Address: 1792
 Number of page faults: 19. Number of memory accesses: 25
+
+(512)
 
      Needed to write frame #0 to memory
 loaded page #1 of processes #105 to frame #0 with no replacement.
