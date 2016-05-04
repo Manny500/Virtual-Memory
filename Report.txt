@@ -2,7 +2,7 @@ Report:
 
 A short introduction to the problem you are trying to solve.
 
-	The objective for this project is to see which page replacement algorithm will achieve a result closest to the optimal page replacement algorithm. The algorithms being compared are optimal, first in first out (FIFO), second chance (SCA), enhanced second chance (ESCA), and a hybrid algorithm (HYBRID). The description for each of these algorithms can be found below. In order to assess the validity of our results it was necessary to ensure that we coded these algorithms correctly. To check this we manually calculated the results for a total of 15 pages using each algorithm and compared them to the outputs from our programs. Then once it was confirmed that they functioned correctly, we used a larger input file to see how each algorithm would compare to each other on a more significant scale. The two input files are included with this report, Small-Input-Processess.txt and Large-Input-Processess.txt. 
+	The objective for this project is to see which page replacement algorithm will achieve a result closest to the optimal page replacement algorithm. The algorithms being compared are optimal, first in first out (FIFO), second chance (SCA), enhanced second chance (ESCA), and a hybrid algorithm (HYBRID). The description for each of these algorithms can be found below. In order to assess the validity of our results it was necessary to ensure that we coded these algorithms correctly. To check this we manually calculated the results for a total of 15 pages using each algorithm and compared them to the outputs from our programs. Then once it was confirmed that they functioned correctly, we used a larger input file to see how each algorithm would compare to each other on a more significant scale. The two input files are included with this report, Small-Input-Processess.txt and Large-Input-Processess.txt. The Large-Input-Processess.txt was generated randomly, but with locality in mind meaning that the numbers are random but within certain ranges.
 
 A description of the how each of the page replacement  methods work, including your hybrid one.
 
@@ -19,7 +19,7 @@ A description of the how each of the page replacement  methods work, including y
 	(1, 0) - recently used but unmodified.
 	(1, 1) - recently used and modified - the worst page to replace.
 
-	The HYBRID is a modification to the FIFO and the LRU algorithms. It checks to see if any frames are open in the page, if there is an open frame then it will assign it a process. Each time a process is allocated or referenced its reference bit is set to one. If all the frames are full, the algorithm will check the reference bit of each process one by one in order, it checks for a process with the reference bit set to zero. When the algorithm points to a process it checks it reference bit, if it is one, it sets the bit to zero and moves on. If the reference bit is zero it replaces that process with the new one. The algorithm always keeps track of where the pointer last pointed to and starts there the next time that it needed. The movement of the pointer is kind of like a clock. 
+	The HYBRID is a modification to the FIFO and the LRU algorithms. It checks to see if any frames are open in the page, if there is an open frame then it will assign it a process. Each time a process is allocated or referenced its reference bit is set to one. If all the frames are full, the algorithm will check the reference bit of each process one by one in order, it checks for a process with the reference bit set to zero. When the algorithm points to a process it checks it reference bit, if it is one, it sets the bit to zero and moves on. If the reference bit is zero it replaces that process with the new one. It does not have a pointer keeping track of the last frame it replaced. It starts looking at frame zero each time.
 
 A description of your code design and your choice of data structures.
 
@@ -92,13 +92,13 @@ Correctness Results - In this section you should present the results for each re
 		101  102  103  104  101  102  105  101  102  103  104  105  102  103  104 
 		 R    R    R    R    W    R    R    R    R    R    R    R    R    W    R
 
-		101  101  101  101  101  101  1O5  105  105  105  104  104  104  104  104
-		 x   102  102  102  102  102  102  101  101  101  101  105  105  105  105
-		 x    x   103  103  103  103  103  103  102  102  102  102  102  102  102
-		 x    x    x   104  104  104  104  104  104  103  103  103  103  103  103
+		101  101  101  101  101  101  1O5  105  102  102  102  105  105  105  105
+		 x   102  102  102  102  102  102  101  101  101  101  101  102  102  102
+		 x    x   103  103  103  103  103  103  103  103  103  103  103  103  103
+		 x    x    x   104  104  104  104  104  104  104  104  104  104  104  104
    
-   		 FD   FD   FD   FD   D         FD   FD   FD   FD   FD   FD        D    =	# of page faults   = 10
-												# of disk accesses = 12
+   		 FD   FD   FD   FD   D         FD   FD   FD             FD   FD    D    =	# of page faults   = 9
+												# of disk accesses = 11
 			
 		Output:
 
@@ -112,29 +112,29 @@ Correctness Results - In this section you should present the results for each re
      				Virtual Address: 512 -> Physical Address: 1536
      				Needed to write frame #0 to memory
 			no page fault. accessed frame #0
-				Virtual Address: 513 -> Physical Address: 1
+     				Virtual Address: 513 -> Physical Address: 1
 			no page fault. accessed frame #1
      				Virtual Address: 513 -> Physical Address: 513
 			loaded page #1 of processes #105 to frame #0 with replacement.
      				Virtual Address: 513 -> Physical Address: 1
 			loaded page #1 of processes #101 to frame #1 with replacement.
      				Virtual Address: 514 -> Physical Address: 514
-			loaded page #1 of processes #102 to frame #2 with replacement.
-     				Virtual Address: 514 -> Physical Address: 1026
-			loaded page #1 of processes #103 to frame #3 with replacement.
-     				Virtual Address: 514 -> Physical Address: 1538
-			loaded page #1 of processes #104 to frame #0 with replacement.
+			loaded page #1 of processes #102 to frame #0 with replacement.
      				Virtual Address: 514 -> Physical Address: 2
-			loaded page #1 of processes #105 to frame #1 with replacement.
+			no page fault. accessed frame #2
+     				Virtual Address: 514 -> Physical Address: 1026
+			no page fault. accessed frame #3
+     				Virtual Address: 514 -> Physical Address: 1538
+			loaded page #1 of processes #105 to frame #0 with replacement.
+     				Virtual Address: 515 -> Physical Address: 3
+			loaded page #1 of processes #102 to frame #1 with replacement.
      				Virtual Address: 515 -> Physical Address: 515
+     				Needed to write frame #2 to memory
 			no page fault. accessed frame #2
      				Virtual Address: 515 -> Physical Address: 1027
-     				Needed to write frame #3 to memory
 			no page fault. accessed frame #3
-     				Virtual Address: 515 -> Physical Address: 1539
-			no page fault. accessed frame #0
-     				Virtual Address: 516 -> Physical Address: 0
-			Number of page faults: 10. Number of memory accesses: 12
+     				Virtual Address: 516 -> Physical Address: 1536
+			Number of page faults: 9. Number of memory accesses: 11
 
 	OPRA:(512B page size)
 
@@ -334,7 +334,61 @@ Correctness Results - In this section you should present the results for each re
 
 Analysis Results - Using a larger input file (), show a table which compares the results of all different page replacement algorithms.  When generating larger files try to be thoughtful of how you generate them (perhaps use the ideas of working sets).
 
+	*(512B page size)
+
+	Page Size	Algorithm	Page Faults	Memory Accesses		Ranking
+
+	32B		OPRA		19		25
+
+	64B		OPRA		19		25
+	
+	256B		OPRA		19		19
+
+	512B		OPRA		23		29			1
+
+	32B		FIFO		19		25
+
+	64B		FIFO		19		25
+	
+	256B		FIFO		19		25
+
+	512B		FIFO		33		39			4
+
+	32B		LRU 		
+
+	64B		LRU
+	
+	256B		LRU
+	
+	512B		LRU		30		36			2
+
+	32B		SCA 
+
+	64B		SCA
+	
+	256B		SCA
+
+	512B		SCA		43		49			5
+
+	32B		ESCA 
+
+	64B		ESCA
+	
+	256B		ESCA
+
+	512B		ESCA		44		50			6
+
+	32B		HYBRID 
+
+	64B		HYBRID
+	
+	256B		HYBRID
+
+	512B		HYBRID		33		39			3
+
 Conclusion - Which algorithms worked the best and in what cases.
+
+	
 
 An appendix describing which part of the project each team member was in charge of.
 
@@ -348,3 +402,5 @@ An appendix describing which part of the project each team member was in charge 
 	Conrad - Introduction
 
 References - If necessary.
+
+	The results for the large input file are attached in the same folder.

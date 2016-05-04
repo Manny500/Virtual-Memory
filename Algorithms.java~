@@ -636,7 +636,7 @@ public class Algorithms{
           
           //add to sorting list
           for(int x = 0; x < frameNum; x++){
-            
+
             sortingL.add(myList[x]); 
           }
           
@@ -706,7 +706,6 @@ public class Algorithms{
           if(process.getPid() == myList[x].getPid()){
             
             myList[x].setAllocationTime(time);
-            break;
           }
         }
         
@@ -937,8 +936,8 @@ public class Algorithms{
           
           if(process.getPid() == myList[x].getPid() ){
             
+            //System.out.println("setting sc to 1");
             myList[x].sc1();
-            break;
           }
         }
         
@@ -1160,7 +1159,7 @@ public class Algorithms{
               }else if(process.getReadWrite().equals("W")){
                 
                 for(int i = 0; i < frameNum; i++){
-                  
+          
                   if(process.getPid() == myList[i].getPid() ){
                     
                     myList[i].ref1();//used
@@ -1191,8 +1190,7 @@ public class Algorithms{
           
           if(process.getPid() == myList[x].getPid() ){
             
-            myList[x].sc1();
-            break;
+            myList[x].sc1();//used
           }
         }
         
@@ -1256,7 +1254,7 @@ public class Algorithms{
     pageNum = -1; //frame number, after that its a new page?
     access = -1;
     empty = -1;
-    //clock = 0;
+    clock = 0;
     time = 0;
     
     //clear the sorting list, make sure it is empty
@@ -1305,7 +1303,7 @@ public class Algorithms{
           
           //assign the process to the empty space/frame
           //assign used bit to 0
-          process.setUsedBit(1);
+          process.setUsedBit(0);
           myList[empty] = process;
           
           //get binary rep of the virtual address
@@ -1347,12 +1345,12 @@ public class Algorithms{
           //look for the used bit equal to 0
           //check which full frame to replace
           //set x to where we last left, keep a circular list
-          for(int x = 0; x < frameNum; x++){
+          for(int x = clock; x < frameNum; x++){
             
             if(myList[x].getUsedBit() == 0){
               
               process1 = myList[x];
-              //clock = x;
+              clock = x;
               break;
             }else
               
@@ -1372,7 +1370,7 @@ public class Algorithms{
             
             if(process1.getPid() == myList[x].getPid() ){
               
-              process.setUsedBit(1);
+              process.setUsedBit(0);
               myList[x] = process;
               
               //get binary rep of the virtual address
@@ -1430,7 +1428,6 @@ public class Algorithms{
           if(process.getPid() == myList[x].getPid() ){
             
             myList[x].setUsedBit(1);
-            break;
           }
         }
         

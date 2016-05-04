@@ -1,0 +1,127 @@
+     Needed to write frame #0 to memory
+loaded page #1 of processes #105 to frame #0 with no replacement.
+     Virtual Address: 513 -> Physical Address: 1
+loaded page #1 of processes #101 to frame #1 with no replacement.
+     Virtual Address: 513 -> Physical Address: 513
+loaded page #1 of processes #103 to frame #2 with no replacement.
+     Virtual Address: 513 -> Physical Address: 1025
+loaded page #1 of processes #102 to frame #3 with no replacement.
+     Virtual Address: 514 -> Physical Address: 1538
+loaded page #1 of processes #100 to frame #1 with replacement.
+     Virtual Address: 514 -> Physical Address: 514
+loaded page #1 of processes #106 to frame #1 with replacement.
+     Virtual Address: 514 -> Physical Address: 514
+no page fault. accessed frame #0
+     Virtual Address: 515 -> Physical Address: 3
+no page fault. accessed frame #0
+     Virtual Address: 515 -> Physical Address: 3
+loaded page #1 of processes #104 to frame #1 with replacement.
+     Virtual Address: 515 -> Physical Address: 515
+no page fault. accessed frame #3
+     Virtual Address: 515 -> Physical Address: 1539
+no page fault. accessed frame #2
+     Virtual Address: 515 -> Physical Address: 1027
+no page fault. accessed frame #1
+     Virtual Address: 516 -> Physical Address: 512
+loaded page #1 of processes #101 to frame #1 with replacement.
+     Virtual Address: 516 -> Physical Address: 512
+loaded page #1 of processes #104 to frame #1 with replacement.
+     Virtual Address: 517 -> Physical Address: 513
+no page fault. accessed frame #0
+     Virtual Address: 517 -> Physical Address: 1
+     Needed to write frame #2 to memory
+no page fault. accessed frame #2
+     Virtual Address: 517 -> Physical Address: 1025
+no page fault. accessed frame #1
+     Virtual Address: 517 -> Physical Address: 513
+loaded page #1 of processes #101 to frame #3 with replacement.
+     Virtual Address: 517 -> Physical Address: 1537
+loaded page #1 of processes #100 to frame #3 with replacement.
+     Virtual Address: 518 -> Physical Address: 1538
+loaded page #1 of processes #106 to frame #3 with replacement.
+     Virtual Address: 518 -> Physical Address: 1538
+loaded page #1 of processes #112 to frame #3 with replacement.
+     Virtual Address: 518 -> Physical Address: 1538
+loaded page #1 of processes #109 to frame #3 with replacement.
+     Virtual Address: 519 -> Physical Address: 1539
+loaded page #1 of processes #107 to frame #3 with replacement.
+     Virtual Address: 519 -> Physical Address: 1539
+     Needed to write frame #3 to memory
+loaded page #1 of processes #109 to frame #3 with replacement.
+     Virtual Address: 519 -> Physical Address: 1539
+loaded page #1 of processes #111 to frame #3 with replacement.
+     Virtual Address: 519 -> Physical Address: 1539
+loaded page #1 of processes #109 to frame #3 with replacement.
+     Virtual Address: 520 -> Physical Address: 1536
+loaded page #1 of processes #108 to frame #3 with replacement.
+     Virtual Address: 520 -> Physical Address: 1536
+loaded page #1 of processes #111 to frame #3 with replacement.
+     Virtual Address: 520 -> Physical Address: 1536
+loaded page #1 of processes #107 to frame #3 with replacement.
+     Virtual Address: 521 -> Physical Address: 1537
+loaded page #1 of processes #112 to frame #3 with replacement.
+     Virtual Address: 521 -> Physical Address: 1537
+     Needed to write frame #3 to memory
+loaded page #1 of processes #109 to frame #3 with replacement.
+     Virtual Address: 521 -> Physical Address: 1537
+loaded page #1 of processes #110 to frame #3 with replacement.
+     Virtual Address: 521 -> Physical Address: 1537
+loaded page #1 of processes #109 to frame #3 with replacement.
+     Virtual Address: 521 -> Physical Address: 1537
+loaded page #1 of processes #111 to frame #3 with replacement.
+     Virtual Address: 522 -> Physical Address: 1538
+loaded page #1 of processes #110 to frame #3 with replacement.
+     Virtual Address: 522 -> Physical Address: 1538
+loaded page #1 of processes #112 to frame #3 with replacement.
+     Virtual Address: 522 -> Physical Address: 1538
+loaded page #1 of processes #111 to frame #3 with replacement.
+     Virtual Address: 523 -> Physical Address: 1539
+no page fault. accessed frame #3
+     Virtual Address: 523 -> Physical Address: 1539
+loaded page #1 of processes #109 to frame #1 with replacement.
+     Virtual Address: 523 -> Physical Address: 515
+no page fault. accessed frame #1
+     Virtual Address: 524 -> Physical Address: 512
+loaded page #1 of processes #116 to frame #2 with replacement.
+     Virtual Address: 524 -> Physical Address: 1024
+     Needed to write frame #2 to memory
+loaded page #1 of processes #118 to frame #2 with replacement.
+     Virtual Address: 524 -> Physical Address: 1024
+loaded page #1 of processes #114 to frame #2 with replacement.
+     Virtual Address: 524 -> Physical Address: 1024
+loaded page #1 of processes #117 to frame #2 with replacement.
+     Virtual Address: 525 -> Physical Address: 1025
+loaded page #1 of processes #116 to frame #2 with replacement.
+     Virtual Address: 525 -> Physical Address: 1025
+loaded page #1 of processes #113 to frame #2 with replacement.
+     Virtual Address: 525 -> Physical Address: 1025
+no page fault. accessed frame #2
+     Virtual Address: 525 -> Physical Address: 1025
+loaded page #1 of processes #114 to frame #3 with replacement.
+     Virtual Address: 525 -> Physical Address: 1537
+no page fault. accessed frame #2
+     Virtual Address: 526 -> Physical Address: 1026
+loaded page #1 of processes #116 to frame #3 with replacement.
+     Virtual Address: 526 -> Physical Address: 1538
+loaded page #1 of processes #114 to frame #3 with replacement.
+     Virtual Address: 526 -> Physical Address: 1538
+loaded page #1 of processes #116 to frame #3 with replacement.
+     Virtual Address: 526 -> Physical Address: 1538
+no page fault. accessed frame #2
+     Virtual Address: 526 -> Physical Address: 1026
+     Needed to write frame #3 to memory
+no page fault. accessed frame #3
+     Virtual Address: 527 -> Physical Address: 1539
+loaded page #1 of processes #118 to frame #1 with replacement.
+     Virtual Address: 527 -> Physical Address: 515
+no page fault. accessed frame #3
+     Virtual Address: 527 -> Physical Address: 1539
+loaded page #1 of processes #114 to frame #1 with replacement.
+     Virtual Address: 528 -> Physical Address: 512
+no page fault. accessed frame #1
+     Virtual Address: 528 -> Physical Address: 512
+loaded page #1 of processes #115 to frame #1 with replacement.
+     Virtual Address: 528 -> Physical Address: 512
+no page fault. accessed frame #3
+     Virtual Address: 528 -> Physical Address: 1536
+Number of page faults: 43. Number of memory accesses: 49
