@@ -1291,8 +1291,8 @@ public class Algorithms{
         if(empty != -1){
           
           //assign the process to the empty space/frame
-          //assign used bit to 0
-          process.setUsedBit(0);
+          //assign used bit to 1
+          process.setUsedBit(1);
           myList[empty] = process;
           
           //get binary rep of the virtual address
@@ -1359,7 +1359,7 @@ public class Algorithms{
             
             if(process1.getPid() == myList[x].getPid() ){
               
-              process.setUsedBit(0);
+              process.setUsedBit(1);
               myList[x] = process;
               
               //get binary rep of the virtual address
@@ -1412,16 +1412,8 @@ public class Algorithms{
           memoryCount++;
         }
         
-        for(int x = 0; x < frameNum; x++){
-          
-          if(process.getPid() == myList[x].getPid() ){
-            
-            myList[x].setUsedBit(1);
-          }
-        }
-        
         //set used bit to 1, representing that it should stay for atleast one more round
-        //process.setUsedBit(1);
+        process.setUsedBit(1);
         
         //get binary rep of the virtual address
         virtualAddress = Integer.toBinaryString((process.getAddress()));

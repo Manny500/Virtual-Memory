@@ -279,13 +279,13 @@ Correctness Results - In this section you should present the results for each re
 		101  102  103  104  101  102  105  101  102  103  104  105  102  103  104 
 		 R    R    R    R    W    R    R    R    R    R    R    R    R    W    R
 
-		101  101  101  101  101  101  1O1  101  101  101  101  101  101  101  104
-		 x   102  102  102  102  102  102  102  102  102  102  102  102  102  105
-		 x    x   103  103  103  103  105  105  105  103  103  105  105  103  102
-		 x    x    x   104  104  104  104  104  104  104  104  104  104  104  103
+		101  101  101  101  101  101  1O1  101  101  101  101  101  101  101  101
+		 x   102  102  102  102  102  102  102  102  102  102  102  102  102  102
+		 x    x   103  103  103  103  105  105  105  103  103  105  105  103  103
+		 x    x    x   104  104  104  104  104  104  104  104  104  104  104  104
    
-   		 FD   FD   FD   FD   D         FD             FD        FD        D    =	# of page faults   = 7
-												# of disk accesses = 9
+   		 FD   FD   FD   FD   D         FD             FD        FD       FDF    =	# of page faults   = 8
+												# of disk accesses = 10
 		
 		Output:
 
