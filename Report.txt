@@ -354,19 +354,19 @@ Analysis Results - Using a larger input file (), show a table which compares the
 
 	512B		FIFO		33		39			4
 
-	32B		LRU 		
+	32B		LRU 		19		25
 
-	64B		LRU
+	64B		LRU		19		25
 	
-	256B		LRU
+	256B		LRU		19		25
 	
 	512B		LRU		30		36			2
 
-	32B		SCA 
+	32B		SCA 		19		25
 
-	64B		SCA
+	64B		SCA		19		25
 	
-	256B		SCA
+	256B		SCA		38		44
 
 	512B		SCA		43		49			5
 
