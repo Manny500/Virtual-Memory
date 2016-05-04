@@ -284,7 +284,7 @@ Correctness Results - In this section you should present the results for each re
 		 x    x   103  103  103  103  105  105  105  103  103  105  105  103  103
 		 x    x    x   104  104  104  104  104  104  104  104  104  104  104  104
    
-   		 FD   FD   FD   FD   D         FD             FD        FD       FDD    =	# of page faults   = 8
+   		 FD   FD   FD   FD   D         FD             FD        FD       FDF    =	# of page faults   = 8
 												# of disk accesses = 10
 		
 		Output:

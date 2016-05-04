@@ -862,7 +862,7 @@ public class Algorithms{
         }else{
           
           //add to sorting list, accounting for second chances
-          for(int x = 0; x < frameNum; x++){
+          for(int x = curFrame; x < frameNum; x++){
             
             if(myList[x].getChance()==0){
               
@@ -1004,9 +1004,6 @@ public class Algorithms{
     time = 0;
     int curFrame = 0;//used to cycle through frames in round robin fashion
     
-    //clear the sorting list, make sure it is empty
-    sortingL.clear();
-    
     //loop through all the process in the list as they come in
     while(!list.isEmpty()){
       
@@ -1014,7 +1011,7 @@ public class Algorithms{
       process = list.get(0);
       pid = process.getPid();
       list.remove(0); //make sure to remove, avoid duplicates
-      process.sc1();
+      process.sc0();
       process.ref0();
       
       //check if we have to modify any of the frames
@@ -1047,8 +1044,6 @@ public class Algorithms{
       //If we have to modify, calculate which frame to modify
       if(modify == true){
         
-        //reads only acces memory once
-        process.ref1();
         
         //if there is a space open
         if(empty != -1){
@@ -1075,13 +1070,11 @@ public class Algorithms{
           
           if(process.getReadWrite().equals("R")){
             
-            process.sc1();
             memoryCount++;
             
             //if dirty must access memory twice
           }else if(process.getReadWrite().equals("W")){
             
-            process.ref1();
             
             System.out.println("     Needed to write frame #" + empty + " to memory");
             memoryCount = memoryCount + 2;
@@ -1095,30 +1088,41 @@ public class Algorithms{
           empty = -1;
         }else{
           
+          boolean firstLoop = true;
           //add to sorting list, accounting for second chances
-          for(int x = 0; x < frameNum; x++){
-            
+          for(int x = curFrame; x < frameNum; x++)
+          {
             if(myList[x].getChance()==0 && myList[x].getRef()==0){
               
               process1 = myList[x];
               curFrame = x;
               break;
-            }else if(myList[x].getChance()==0 && myList[x].getRef()==1){
-              
-              myList[x].ref0();
-            }else if(myList[x].getChance()==1 && myList[x].getRef()==0){
-              
-              myList[x].sc0();
-              myList[x].ref1();
-            }else if(myList[x].getChance()==1 && myList[x].getRef()==1){
-              
-              myList[x].sc1();
-              myList[x].ref0();
+            }else if(myList[x].getChance()==0 && myList[x].getRef()==1)
+            {
+              if(!firstLoop)
+              {
+                process1 = myList[x];
+                curFrame = x;
+                break;
+              }
+            }else if(myList[x].getChance()==1 && myList[x].getRef()==0)
+            {
+              if(!firstLoop)
+              {
+                myList[x].sc0();
+              }
+            }else if(myList[x].getChance()==1 && myList[x].getRef()==1)
+            {
+              if(!firstLoop)
+              {
+                myList[x].sc0();
+              }
             }
             
-            if(x==frameNum-1){
-              
+            if(x==frameNum-1)
+            {
               x=0;
+              firstLoop = false;
             }
             
           }
@@ -1154,6 +1158,14 @@ public class Algorithms{
                 //if dirty must access memory twice
               }else if(process.getReadWrite().equals("W")){
                 
+                for(int i = 0; i < frameNum; i++){
+          
+                  if(process.getPid() == myList[i].getPid() ){
+                    
+                    myList[i].ref1();//used
+                  }
+                }
+                
                 System.out.println("     Needed to write frame #" + x + " to memory");
                 
                 memoryCount = memoryCount + 2;
@@ -1179,7 +1191,6 @@ public class Algorithms{
           if(process.getPid() == myList[x].getPid() ){
             
             myList[x].sc1();//used
-            myList[x].ref0();//not modified
           }
         }
         
